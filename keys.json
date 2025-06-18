@@ -53,5 +53,18 @@
         "avatar_url": "https://cdn.discordapp.com/avatars/978973261994033202/a53952e5df1812c15e3a68eb9af3f79f.png?size=1024",
         "message_id": "1384837334419378207",
         "guild_id": "1381688709942083694"
+    },
+    "30a1acc6-3dd4-4cbf-bf6a-e31cf61d05a4": {
+        "key": "30a1acc6-3dd4-4cbf-bf6a-e31cf61d05a4",
+        "steam_id": "76561199447657042",
+        "duration": "1d",
+        "created": "2025-06-18 14:21 EEST",
+        "expires": "2025-06-19 14:21 EEST",
+        "creator": "cosmo_so_",
+        "user_id": "809751137099710514",
+        "discord_nickname": "cosmo_so_",
+        "avatar_url": "https://cdn.discordapp.com/avatars/809751137099710514/3b43273981d1d285ef803d2d2a746d4a.png?size=1024",
+        "message_id": "1384855576470622350",
+        "guild_id": "1364233229560975438"
     }
 }
