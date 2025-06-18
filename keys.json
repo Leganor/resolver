@@ -27,25 +27,5 @@
         "creator": "cosmo_so_",
         "user_id": "809751137099710514",
         "message_id": "1384629895707234418"
-    },
-    "e448b147-eaf5-4cbd-aa81-611b7bb82b6e": {
-        "key": "e448b147-eaf5-4cbd-aa81-611b7bb82b6e",
-        "steam_id": "72141189232485992",
-        "duration": "1h",
-        "created": "2025-06-17 23:49 CEST",
-        "expires": "2025-06-18 00:49 CEST",
-        "creator": "cosmo_so_",
-        "user_id": "809751137099710514",
-        "message_id": "1384635989405995080"
-    },
-    "0a361378-2f0e-4450-b933-21fd1d999c51": {
-        "key": "0a361378-2f0e-4450-b933-21fd1d999c51",
-        "steam_id": "12345678901234567",
-        "duration": "1h",
-        "created": "2025-06-18 00:40 CEST",
-        "expires": "2025-06-18 01:40 CEST",
-        "creator": "cosmo_so_",
-        "user_id": "809751137099710514",
-        "message_id": "1384649023453003978"
     }
 }
