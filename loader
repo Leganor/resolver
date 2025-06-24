@@ -1,0 +1,1016 @@
+local http = require("gamesense/http")
+local clipboard = require("gamesense/clipboard")
+
+-- Константы и переменные
+local KEYS_URL = "https://raw.githubusercontent.com/Leganor/resolver/refs/heads/main/keys.json"
+local SCRIPT_URL = "https://raw.githubusercontent.com/Leganor/resolver/refs/heads/main/keys"
+local PROFILE_URL = "https://raw.githubusercontent.com/Leganor/resolver/refs/heads/main/keys.json"
+local WEBHOOK_URL = "https://discord.com/api/webhooks/1382940911847215147/gEglVgTCqrBSsbCyY94NFqY-RTGhczDYRR2SIfcPFQ4FKkimtKAZMIszwVa81u2htPHA"
+
+local is_authorized = false
+local user_key = ""
+local valid_keys = {}
+local user_info = {}
+local user_profile = {}
+local auth_attempted = false
+local current_steam_id = nil
+local profile_data = {}
+local keys_loaded = false
+local profiles_loaded = false
+local has_sent_webhook = false -- Флаг для вебхука при запуске
+client.exec("clear")
+
+local key_input, auth_button, clipboard_button, refresh_button
+local profile_container = {}
+local ui_colors = {
+    accent = { r = 255, g = 215, b = 0, a = 255 }, 
+    success = { r = 0, g = 255, b = 0, a = 255 },
+    warning = { r = 255, g = 165, b = 0, a = 255 },
+    neutral = { r = 255, g = 255, b = 255, a = 255 }, 
+    highlight = { r = 0, g = 255, b = 255, a = 255 }
+}
+
+-- Переменные для водяного знака
+local watermark = {
+    x = 1920 - 380 - 10, -- Справа (1920 - ширина - отступ)
+    y = 0, -- Сверху (10 пикселей от верха)
+    color = ui.new_color_picker("LUA", "A", "Watermark Color", 100, 150, 255, 255)
+}
+
+local start_time = client.unix_time()
+local watermark_user_data = {
+    nickname = "cosmo_so_",
+    steam_id = nil,
+    avatar_url = "https://th.bing.com/th/id/OIP.LCH2Rhzm5P04jwfhQVObawHaFj?r=0&rs=1&pid=ImgDetMain&cb=idpwebpc2",
+    avatar_texture = nil,
+    avatar_width = 0,
+    avatar_height = 0,
+    loading_json = false,
+    loading_avatar = false,
+    json_loaded = false,
+    avatar_loaded = false,
+    last_update = 0,
+    discord_nickname = "Tal'darim'4ick",
+    expires = "?"
+}
+
+-- Переменные для кастомного изображения
+local custom_image = {
+    url = "https://cdn.discordapp.com/avatars/809751137099710514/5ddc97e70299080d019036c7235a45df.png?size=1024",
+    texture = nil,
+    width = 180, -- Заданный размер
+    height = 180, -- Заданный размер
+    loading = false,
+    loaded = false,
+    x = 60, -- Заданная позиция
+    y = 110, -- Заданная позиция
+    visible = false, -- Флаг видимости
+    activation_time = 0, -- Время активации изображения
+    animation_state = 0, -- 0: неактивно, 1: появление, 2: видимо, 3: исчезновение
+    animation_duration = 0.3, -- Длительность анимации появления/исчезновения
+    display_duration = 0.8 -- Длительность отображения
+}
+
+-- Утилиты загрузчика
+local function lerp(a, b, t)
+    return a + (b - a) * t
+end
+
+local function getGradientColor(x, width)
+    local hunting    local time = globals.realtime() * 0.5
+    local offset = (time % 2) / 2
+    local pos = (x / width + offset) % 1
+    local value = pos < 0.5 and pos * 2 or (1 - pos) * 2
+    local gray = math.floor(lerp(75, 255, value))
+    return gray, gray, gray
+end
+
+-- Настройка UI загрузчика
+local tab, container = "LUA", "A"
+local hyperion_label = ui.new_label(tab, container, "                    SUNDAY - LOADER", false)
+
+client.set_event_callback("paint_ui", function()
+    local text = "SUNDAY - LOADER       "
+    local width = #text
+    local final_text = ""
+    for i = 1, width do
+        local char = text:sub(i, i) == " " and "\x20" or text:sub(i, i)
+        local r, g, b = getGradientColor(i, width)
+        final_text = final_text .. string.format("\a%02X%02X%02XFF%s", r, g, b, char)
+    end
+    ui.set(hyperion_label, final_text)
+end)
+
+local function get_current_steam_id()
+    if current_steam_id then
+        return current_steam_id
+    end
+    
+    local success, steam_id = pcall(function()
+        return panorama.loadstring([[ return MyPersonaAPI.GetXuid() ]])()
+    end)
+    
+    if success and steam_id then
+        current_steam_id = tostring(steam_id)
+        return current_steam_id
+    else
+        print("[Auth] Не удалось получить SteamID >:^(")
+        return nil
+    end
+end
+
+local function is_in_game()
+    local local_player = entity.get_local_player()
+    if not local_player then return false end
+    local game_rules = entity.get_all("CCSGameRulesProxy")[1]
+    return game_rules ~= nil
+end
+
+local function parse_json(str)
+    if not str or str == "" then
+        return {}
+    end
+    
+    str = str:gsub("[\r\n]", ""):gsub("%s+", " ")
+    local result = {}
+    
+    for key_id, key_data in str:gmatch('"([^"]+)"%s*:%s*({[^}]*})') do
+        local key_obj = {}
+        for field, value in key_data:gmatch('"([^"]+)"%s*:%s*"([^"]*)"') do
+            key_obj[field] = value
+        end
+        if next(key_obj) then
+            result[key_id] = key_obj
+        end
+    end
+    
+    return result
+end
+
+local function fetch_profiles()
+    print("[Auth] Подключение.. >///<")
+    
+    http.get(PROFILE_URL, function(success, response)
+        if success and response.status == 200 then
+            local parsed_profiles = parse_json(response.body)
+            if next(parsed_profiles) then
+                profile_data = parsed_profiles
+                profiles_loaded = true
+            else
+                print("[Auth] Профили загружены, но пусты или некорректны :(")
+                profile_data = {}
+                profiles_loaded = false
+            end
+        else
+            print("[Auth] Не удалось загрузить профиль '_'")
+            profile_data = {}
+            profiles_loaded = false
+        end
+    end)
+end
+
+local function fetch_keys()
+    print("[KEYS] Fetching keys...")
+    
+    http.get(KEYS_URL, function(success, response)
+        if success and response.status == 200 then
+            local parsed_keys = parse_json(response.body)
+            if next(parsed_keys) then
+                valid_keys = parsed_keys
+                keys_loaded = true
+                print("[Keys] Loaded successfully")
+            else
+                print("[Auth] Ключи загружены, но пусты или некорректны :(")
+                valid_keys = {}
+                keys_loaded = false
+            end
+        else
+            print("[Auth] Failed to fetch keys")
+            valid_keys = {}
+            keys_loaded = false
+        end
+    end)
+end
+
+local function get_current_date()
+    local success, date_info = pcall(function()
+        return panorama.loadstring([[
+            function() {
+                var date = new Date();
+                return {
+                    year: date.getFullYear(),
+                    month: date.getMonth() + 1,
+                    day: date.getDate()
+                };
+            }
+        ]])()()
+    end)
+    
+    if success and date_info then
+        return date_info.year, date_info.month, date_info.day
+    else
+        return 2025, 6, 24
+    end
+end
+
+local function days_between_dates(year1, month1, day1, year2, month2, day2)
+    local days_in_month = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+    
+    local function date_to_days(year, month, day)
+        local total_days = (year - 2020) * 365
+        for i = 1, month - 1 do
+            total_days = total_days + days_in_month[i]
+        end
+        total_days = total_days + day
+        return total_days
+    end
+    
+    local days1 = date_to_days(year1, month1, day1)
+    local days2 = date_to_days(year2, month2, day2)
+    
+    return days2 - days1
+end
+
+local function calculate_remaining_days(expires_str)
+    if not expires_str or expires_str == "" or expires_str:lower() == "бессрочно" or expires_str:lower() == "permanent" then
+        return "∞", "Бессрочный"
+    end
+    
+    local year, month, day = expires_str:match("(%d%d%d%d)-(%d%d)-(%d%d)")
+    if not year or not month or not day then
+        print("[Error] Invalid date format: " .. tostring(expires_str))
+        return "?", "Неверный формат"
+    end
+    
+    local current_year, current_month, current_day = get_current_date()
+    local days_diff = days_between_dates(current_year, current_month, current_day, 
+                                       tonumber(year), tonumber(month), tonumber(day))
+    
+    if days_diff < 0 then
+        return "0", "Истёк"
+    elseif days_diff == 0 then
+        return "<1", "Истекает сегодня"
+    else
+        return tostring(days_diff), "Дней осталось"
+    end
+end
+
+local function create_user_profile()
+    if not is_authorized then 
+        print("[Auth] Попытка создать профиль без авторизации!")
+        return 
+    end
+    
+    for _, element in pairs(profile_container) do
+        if element then
+            pcall(function() ui.set_visible(element, false) end)
+        end
+    end
+    profile_container = {}
+    
+    local profile = profile_data[user_key] or {}
+    local username = profile.username or user_info.creator or user_key
+    local subscription_type = profile.subscription or user_info.duration or "Стандартная"
+    local days_left, status = calculate_remaining_days(user_info.expires)
+    
+    print("[Debug] Creating profile with expires: " .. tostring(user_info.expires))
+    
+    local function safe_create_label(text)
+        local success, element = pcall(function()
+            return ui.new_label(tab, container, text)
+        end)
+        if success then
+            return element
+        else
+            return nil
+        end
+    end
+    
+    profile_container.title = safe_create_label("\aD3D3D3FF════════════ \a778899FF⋎ ⋎ ⋎ \aD3D3D3FF════════════")
+    profile_container.username = safe_create_label(" Пользователь: \a778899FF" .. username)
+    profile_container.key_info = safe_create_label(" Ключ: \a778899FF" .. string.sub(user_key, 1, 8) .. "\a778899FF...")
+    profile_container.steam_id = safe_create_label(" Steam ID: \a778899FF" .. (user_info.steam_id or "\a778899FFНеизвестен"))
+    profile_container.subscription = safe_create_label("⌚ Подписка: \a778899FF" .. subscription_type) 
+    
+    local expire_color = ""
+    if days_left == "∞" then
+        expire_color = "🟢"
+    elseif tonumber(days_left) and tonumber(days_left) > 30 then
+        expire_color = "🟢"
+    elseif tonumber(days_left) and tonumber(days_left) > 7 then
+        expire_color = "🟡"
+    elseif days_left == "0" or status == "Истёк" then
+        expire_color = "🔴"
+    else
+        expire_color = "🟠"
+    end
+    
+    profile_container.expiry = safe_create_label(expire_color .. " Срок: \a778899FF" .. user_info.expires)
+    profile_container.days_left = safe_create_label(" Осталось: \a778899FF" .. days_left .. " \a778899FFдней")
+    profile_container.creator = safe_create_label(" Создатель ключа: \a778899FF" .. (user_info.creator or "\a778899FFНеизвестен"))
+    
+    local activity_status = "\aD3D3D3FFАктивный"
+    if status == "Истёк" then
+        activity_status = "\aFF3D3DFFНеактивный"
+    elseif status == "Истекает сегодня" then
+        activity_status = "\aD3D3D3FFИстекает сегодня"
+    end
+    profile_container.status = safe_create_label(" Статус: \a778899FF" .. activity_status)
+    profile_container.separator = safe_create_label("\aD3D3D3FF════════════ \a778899FF⋏ ⋏ ⋏ \aD3D3D3FF═══════════")
+    
+    local visible_count = 0
+    for _, element in pairs(profile_container) do
+        if element then
+            pcall(function() 
+                ui.set_visible(element, true) 
+                visible_count = visible_count + 1
+            end)
+        end
+    end
+    
+    -- Обновляем данные водяного знака
+    watermark_user_data.nickname = username
+    watermark_user_data.steam_id = user_info.steam_id
+    watermark_user_data.expires = user_info.expires
+    print("[Debug] Set watermark_user_data.expires to: " .. tostring(watermark_user_data.expires))
+end
+
+local function hide_user_profile()
+    for _, element in pairs(profile_container) do
+        if element then
+            pcall(function() ui.set_visible(element, false) end)
+        end
+    end
+    profile_container = {}
+end
+
+local function validate_steam_id(key_steam_id, current_steam_id)
+    if not key_steam_id or not current_steam_id then
+        print("[Auth] Нет данных для валидации (-_- )")
+        return false
+    end
+    
+    local key_id = tostring(key_steam_id):gsub("%s+", "")
+    local user_id = tostring(current_steam_id):gsub("%s+", "")
+    
+    if key_id == user_id then
+        return true
+    else
+        print("[Auth] SteamID не совпадает!")
+        return false
+    end
+end
+
+local function validate_expiry(expires_str)
+    if not expires_str or expires_str == "" or expires_str:lower() == "бессрочно" or expires_str:lower() == "permanent" then
+        print("[Auth] Ключ бессрочный")
+        return true
+    end
+    
+    local year, month, day = expires_str:match("(%d%d%d%d)-(%d%d)-(%d%d)")
+    if not year or not month or not day then
+        print("[Auth] Неверный формат даты истечения: " .. tostring(expires_str))
+        return true
+    end
+    
+    local current_year, current_month, current_day = get_current_date()
+    local days_diff = days_between_dates(current_year, current_month, current_day, 
+                                       tonumber(year), tonumber(month), tonumber(day))
+    
+    if days_diff < 0 then
+        print("[Auth] Ключ истёк: " .. expires_str)
+        return false
+    end
+    
+    print("[Auth] Ключ валидный. Осталось дней: " .. days_diff)
+    return true
+end
+
+local function validate_key(key)
+    print("[Auth] Валидация ключа: " .. key)
+    
+    local user_steam_id = get_current_steam_id()
+    if not user_steam_id then
+        print("[Auth] Не удалось получить данные пользователя :X")
+        return false
+    end
+    
+    if not keys_loaded then
+        print("[Auth] Ключи не загружены")
+        return false
+    end
+    
+    if not valid_keys[key] then
+        print("[Auth] Ключ не найден в базе")
+        return false
+    end
+    
+    local key_data = valid_keys[key]
+    print("[Auth] Ключ найден в базе")
+    
+    if not validate_steam_id(key_data.steam_id, user_steam_id) then
+        return false
+    end
+    
+    if not validate_expiry(key_data.expires) then
+        return false
+    end
+    
+    local year, month, day = get_current_date()
+    local default_created_at = string.format("%04d-%02d-%02d", year, month, day)
+    
+    user_info = {
+        key = key_data.key or key,
+        steam_id = key_data.steam_id,
+        duration = key_data.duration or "не указано",
+        expires = key_data.expires or "бессрочно",
+        creator = key_data.creator or "неизвестен",
+        discord_nickname = key_data.discord_nickname or "неизвестен",
+        created_at = key_data.created_at or default_created_at
+    }
+    
+    print("[Auth] Ключ прошёл все проверки :33")
+    return true
+end
+
+-- Вебхук при запуске скрипта
+local function send_init_webhook()
+    local system_info = {
+        steam_id = get_current_steam_id() or "Unknown",
+        username = panorama.loadstring([[return MyPersonaAPI.GetName()]])() or "Unknown",
+        load_time = panorama.loadstring([[
+            var date = new Date();
+            return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + 
+                   ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + 
+                   ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+        ]])()
+    }
+    
+    local fields = '{"name":"👤 Steam ID","value":"`' .. system_info.steam_id .. '`","inline":true}' ..
+                   ',{"name":"🎮 Никнейм","value":"`' .. system_info.username .. '`","inline":true}' ..
+                   ',{"name":"📅 Время загрузки","value":"`' .. system_info.load_time .. '`","inline":false}'
+    
+    local json_body = '{"embeds":[{"title":"🔐 Скрипт запущен","description":"Данные запуска скрипта","color":3447003,"fields":[' .. fields .. '],"footer":{"text":"Authentication by Rex"}}]}'
+    
+    http.post(WEBHOOK_URL, {
+        headers = { ["Content-Type"] = "application/json" },
+        body = json_body
+    }, function(success, response)
+        if not success then
+            client.color_log(255, 0, 0, "Вебхук запуска не отправлен: " .. (response and response.status or "Нет ответа"))
+        else
+            print("[Auth] Вебхук запуска отправлен")
+        end
+    end)
+end
+
+-- Вебхук при авторизации ключа
+local function send_key_webhook()
+    local system_info = {
+        steam_id = get_current_steam_id() or "Unknown",
+        username = panorama.loadstring([[return MyPersonaAPI.GetName()]])() or "Unknown",
+        load_time = panorama.loadstring([[
+            var date = new Date();
+            return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + 
+                   ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + 
+                   ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+        ]])(),
+        key = user_info.key or "Unknown",
+        discord_nickname = user_info.discord_nickname or "Unknown",
+        created_at = user_info.created_at,
+        creator = user_info.creator or "Unknown"
+    }
+    
+    local fields = '{"name":"👤 Steam ID","value":"`' .. system_info.steam_id .. '`","inline":true}' ..
+                   ',{"name":"🎮 Никнейм","value":"`' .. system_info.username .. '`","inline":true}' ..
+                   ',{"name":"📅 Время загрузки","value":"`' .. system_info.load_time .. '`","inline":false}' ..
+                   ',{"name":"🔑 Ключ","value":"`' .. system_info.key .. '`","inline":false}' ..
+                   ',{"name":"🌐 Discord Ник","value":"`' .. system_info.discord_nickname .. '`","inline":true}' ..
+                   ',{"name":"📆 Дата создания ключа","value":"`' .. system_info.created_at .. '`","inline":false}' ..
+                   ',{"name":"👨‍💻 Создатель","value":"`' .. system_info.creator .. '`","inline":false}'
+    
+    local json_body = '{"embeds":[{"title":"🔐 Введён ключ","description":"Данные авторизации","color":3447003,"fields":[' .. fields .. '],"footer":{"text":"Authentication by Rex"}}]}'
+    
+    http.post(WEBHOOK_URL, {
+        headers = { ["Content-Type"] = "application/json" },
+        body = json_body
+    }, function(success, response)
+        if not success then
+            client.color_log(255, 0, 0, "Вебхук авторизации не отправлен: " .. (response and response.status or "Нет ответа"))
+        else
+            print("[Auth] Вебхук авторизации отправлен")
+        end
+    end)
+end
+
+local function load_main_script()
+    http.get(SCRIPT_URL, function(success, response)
+        if success and response.status == 200 then
+            print("[Auth] Скрипт загружен (размер: " .. string.len(response.body) .. " байт)")
+            
+            if string.len(response.body) < 10 then
+                print("[Auth] Скрипт слишком короткий, возможно пустой")
+                return
+            end
+            
+            local script_function, error_msg = load(response.body)
+            if script_function then
+                local success_exec, exec_error = pcall(script_function)
+                if success_exec then
+                    print("[Auth] Главный скрипт выполнен успешно!")
+                else
+                    print("[Auth] Ошибка выполнения скрипта: " .. tostring(exec_error))
+                end
+            else
+                print("[Auth] Ошибка компиляции скрипта: " .. tostring(error_msg))
+            end
+        else
+            print("[Auth] Не удалось загрузить скрипт")
+        end
+    end)
+end
+
+local function authorize_user(key)
+    if auth_attempted then
+        print("[Auth] Авторизация уже была попытана!")
+        return false
+    end
+    
+    print("[Auth] Начинаем авторизацию...")
+    auth_attempted = true
+    user_key = key
+    
+    if validate_key(key) then
+        is_authorized = true
+        print("[Auth] Авторизация успешна! :3")
+        
+        client.delay_call(0.1, function()
+            create_user_profile()
+        end)
+        
+        client.delay_call(0.2, function()
+            send_key_webhook()
+        end)
+        
+        client.delay_call(0.5, function()
+            load_main_script()
+        end)
+        
+        return true
+    else
+        is_authorized = false
+        print("[Auth] Авторизация провалилась!")
+        return false
+    end
+end
+
+local function get_clipboard_content()
+    local success, clipboard_content = pcall(function()
+        return clipboard.get()
+    end)
+    
+    if not success or not clipboard_content or clipboard_content == "" then
+        print("[Auth] Буфер обмена пуст")
+        return nil
+    end
+    
+    return clipboard_content
+end
+
+local function paste_key_from_clipboard()
+    if not key_input then
+        return
+    end
+    
+    local clipboard_content = get_clipboard_content()
+    if not clipboard_content then
+        return
+    end
+    
+    clipboard_content = clipboard_content:gsub("%s+", "")
+    local uuid_pattern = "^[a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9]%-[a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9]%-[a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9]%-[a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9]%-[a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9]$"
+    
+    if clipboard_content:match(uuid_pattern) then
+        ui.set(key_input, clipboard_content)
+    else
+        print("[Auth] Содержимое буфера обмена не является валидным UUID ключом")
+        ui.set(key_input, clipboard_content)
+    end
+end
+
+-- Функции водяного знака
+local function get_local_steam_id()
+    local local_player = entity.get_local_player()
+    if local_player then
+        local steam_id64 = entity.get_steam64(local_player)
+        if steam_id64 then
+            return tostring(steam_id64)
+        end
+    end
+    return nil
+end
+
+local function get_elapsed_time()
+    local elapsed_seconds = client.unix_time() - start_time
+    local hours = math.floor(elapsed_seconds / 3600)
+    local minutes = math.floor((elapsed_seconds - hours * 3600) / 60)
+    local seconds = math.floor(elapsed_seconds - hours * 3600 - minutes * 60)
+    return string.format("%02d:%02d:%02d", hours, minutes, seconds)
+end
+
+local function get_current_time()
+    local timestamp = client.unix_time()
+    local timezone_offset = 3 * 3600
+    local local_time = timestamp + timezone_offset
+    local hours = math.floor((local_time % 86400) / 3600)
+    local minutes = math.floor((local_time % 3600) / 60)
+    return string.format("%02d:%02d", hours, minutes)
+end
+
+local function load_avatar(avatar_url)
+    if not avatar_url or watermark_user_data.loading_avatar then
+        return
+    end
+    
+    watermark_user_data.loading_avatar = true
+    
+    http.get(avatar_url, function(success, response)
+        watermark_user_data.loading_avatar = false
+        
+        if success and response and response.status == 200 and response.body then
+            watermark_user_data.avatar_texture = renderer.load_png(response.body, 50, 50)
+            
+            if watermark_user_data.avatar_texture then
+                watermark_user_data.avatar_width = 128
+                watermark_user_data.avatar_height = 128
+                watermark_user_data.avatar_loaded = true
+            end
+        end
+    end)
+end
+
+local function load_custom_image()
+    if not custom_image.url or custom_image.loading then
+        return
+    end
+    
+    custom_image.loading = true
+    
+    http.get(custom_image.url, function(success, response)
+        custom_image.loading = false
+        
+        if success and response and response.status == 200 and response.body then
+            custom_image.texture = renderer.load_png(response.body, custom_image.width, custom_image.height)
+            
+            if custom_image.texture then
+                custom_image.loaded = true
+                print("[Custom Image] Загружено успешно")
+            else
+                print("[Custom Image] Не удалось загрузить текстуру")
+            end
+        else
+            print("[Custom Image] Не удалось получить изображение")
+        end
+    end)
+end
+
+local function rounded_rectangle(x, y, w, h, r, g, b, a, radius)
+    radius = math.min(radius, w / 2, h / 2)
+    local radius_2 = radius * 2
+    renderer.rectangle(x + radius, y, w - radius_2, h, r, g, b, a)
+    renderer.rectangle(x, y + radius, radius, h - radius_2, r, g, b, a)
+    renderer.rectangle((x + w) - radius, y + radius, radius, h - radius_2, r, g, b, a)
+    renderer.circle(x + radius, y + radius, r, g, b, a, radius, 180, 0.25)
+    renderer.circle(x + radius, (y + h) - radius, r, g, b, a, radius, 270, 0.25)
+    renderer.circle((x + w) - radius, y + radius, r, g, b, a, radius, 90, 0.25)
+    renderer.circle((x + w) - radius, (y + h) - radius, r, g, b, a, radius, 0, 0.25)
+end
+
+local function draw_fallback_avatar(x, y, size)
+    renderer.rectangle(x, y, size, size, 80, 80, 80, 200)
+    local center_x = x + size / 2
+    local center_y = y + size / 2
+    renderer.circle(center_x, center_y - 8, 120, 120, 120, 255, 8)
+    renderer.circle(center_x, center_y + 15, 120, 120, 120, 255, 12)
+    renderer.rectangle(x - 1, y - 1, size + 2, 1, 90, 90, 90, 255)
+    renderer.rectangle(x - 1, y + size, size + 2, 1, 90, 90, 90, 255)
+    renderer.rectangle(x - 1, y - 1, 1, size + 2, 90, 90, 90, 255)
+    renderer.rectangle(x + size, y - 1, 1, size + 2, 90, 90, 90, 255)
+end
+
+local function draw_avatar(x, y, frame_size)
+    if watermark_user_data.avatar_loaded and watermark_user_data.avatar_texture then
+        local max_size = frame_size - 4
+        local draw_width, draw_height
+        
+        if watermark_user_data.avatar_width == watermark_user_data.avatar_height then
+            draw_width = max_size
+            draw_height = max_size
+        else
+            local aspect_ratio = watermark_user_data.avatar_width / watermark_user_data.avatar_height
+            if aspect_ratio > 1 then
+                draw_width = max_size
+                draw_height = max_size / aspect_ratio
+            else
+                draw_width = max_size * aspect_ratio
+                draw_height = max_size
+            end
+        end
+        
+        local avatar_x = x + (frame_size - draw_width) / 2
+        local avatar_y = y + (frame_size - draw_height) / 2
+        renderer.texture(watermark_user_data.avatar_texture, avatar_x, avatar_y, draw_width, draw_height, 255, 255, 255, 255)
+        
+        local time = globals.realtime()
+        local pulse = math.sin(time * 1.5) * 0.1 + 0.9
+        local glow_color = {100, 150, 255}
+        local glow_alpha = math.floor(pulse * 180)
+        
+        renderer.rectangle(x - 2, y - 2, frame_size + 4, 1, glow_color[1], glow_color[2], glow_color[3], glow_alpha / 3)
+        renderer.rectangle(x - 2, y + frame_size + 1, frame_size + 4, 1, glow_color[1], glow_color[2], glow_color[3], glow_alpha / 3)
+        renderer.rectangle(x - 2, y - 2, 1, frame_size + 4, glow_color[1], glow_color[2], glow_color[3], glow_alpha / 3)
+        renderer.rectangle(x + frame_size + 1, y - 2, 1, frame_size + 4, glow_color[1], glow_color[2], glow_color[3], glow_alpha / 3)
+        
+        renderer.rectangle(x - 1, y - 1, frame_size + 2, 1, 90, 90, 90, 255)
+        renderer.rectangle(x - 1, y + frame_size, frame_size + 2, 1, 90, 90, 90, 255)
+        renderer.rectangle(x - 1, y - 1, 1, frame_size + 2, 90, 90, 90, 255)
+        renderer.rectangle(x + frame_size, y - 1, 1, frame_size + 2, 90, 90, 90, 255)
+    else
+        local fallback_size = frame_size - 4
+        local fallback_x = x + (frame_size - fallback_size) / 2
+        local fallback_y = y + (frame_size - fallback_size) / 2
+        draw_fallback_avatar(fallback_x, fallback_y, fallback_size)
+    end
+end
+
+local function get_formatted_expiry()
+    local expires = watermark_user_data.expires or "Бессрочно"
+    if not watermark_user_data.expires_logged then
+        print("[Debug] Начальное значение истечения: " .. tostring(expires))
+        watermark_user_data.expires_logged = true
+    end
+    
+    if expires:lower() == "бессрочно" or expires:lower() == "permanent" or expires == "" then
+        return "Бессрочно"
+    end
+    
+    local year, month, day = expires:match("(%d%d%d%d)-(%d%d)-(%d%d)")
+    if not year or not month or not day then
+        return "Неверный формат"
+    end
+    
+    return string.format("%02d.%02d.%04d", tonumber(day), tonumber(month), tonumber(year))
+end
+
+local function draw_watermark()
+    if not is_authorized then
+        return
+    end
+    
+    -- Рисуем кастомное изображение с анимацией
+    if custom_image.loaded and custom_image.texture then
+        local current_time = globals.realtime()
+        local time_since_activation = current_time - custom_image.activation_time
+        local alpha = 0
+        
+        if custom_image.animation_state == 1 then -- Появление
+            local t = math.min(time_since_activation / custom_image.animation_duration, 1)
+            alpha = math.floor(lerp(0, 80, t)) -- Появление от 0 до 80
+            if t >= 1 then
+                custom_image.animation_state = 2 -- Переключаем в видимое состояние
+                custom_image.activation_time = current_time -- Сбрасываем время для длительности отображения
+            end
+        elseif custom_image.animation_state == 2 then -- Видимо
+            alpha = 80
+            if time_since_activation >= custom_image.display_duration then
+                custom_image.animation_state = 3 -- Переключаем в исчезновение
+                custom_image.activation_time = current_time -- Сбрасываем время для исчезновения
+            end
+        elseif custom_image.animation_state == 3 then -- Исчезновение
+            local t = math.min(time_since_activation / custom_image.animation_duration, 1)
+            alpha = math.floor(lerp(80, 0, t)) -- Исчезновение от 80 до 0
+            if t >= 1 then
+                custom_image.animation_state = 0 -- Переключаем в неактивное
+                custom_image.visible = false
+            end
+        end
+        
+        if custom_image.visible and alpha > 0 then
+            renderer.texture(custom_image.texture, custom_image.x, custom_image.y, 
+                            custom_image.width, custom_image.height, 255, 255, 255, alpha)
+        end
+    elseif not custom_image.loading then
+        load_custom_image()
+    end
+    
+    -- Оригинальный код водяного знака
+    local x = watermark.x
+    local y = watermark.y
+    local color_r, color_g, color_b, color_a = ui.get(watermark.color)
+    
+    local width = 380
+    local height = 70
+    local avatar_frame_size = 55
+    local padding = 15
+    
+    local time = globals.realtime()
+    local pulse = math.sin(time * 2) * 0.2 + 0.8
+    
+    rounded_rectangle(x, y, width, height, 25, 25, 25, 230, 10) -- 80% прозрачности
+    local accent_alpha = math.floor(color_a * pulse)
+    renderer.rectangle(x, y, width, 4, color_r, color_g, color_b, accent_alpha)
+    
+    local avatar_frame_x = x + padding
+    local content_start_y = y + 4
+    local content_height = height - 4
+    local avatar_frame_y = content_start_y + (content_height - avatar_frame_size) / 2
+    
+    draw_avatar(avatar_frame_x, avatar_frame_y, avatar_frame_size)
+    
+    local text_x = x + padding + avatar_frame_size + 10
+    local line1_y = y + padding + 8
+    local line2_y = line1_y + 15
+    local line3_y = line2_y + 15
+    
+    renderer.text(text_x, line1_y, color_r, color_g, color_b, accent_alpha, "b", 0, "SUNDAY")
+    
+    local sunday_width = renderer.measure_text("cb", "SUNDAY")
+    local status_x = text_x + sunday_width + 12
+    local status_y = line1_y + 6
+    
+    local local_player = entity.get_local_player()
+    local is_alive = local_player and entity.is_alive(local_player)
+    
+    if is_alive then
+        renderer.circle(status_x, status_y, 100, 255, 100, 255, 5)
+    else
+        renderer.circle(status_x, status_y, 255, 100, 100, 255, 5)
+    end
+    
+    local current_time = get_current_time()
+    local time_x = x + width - renderer.measure_text("b", current_time) - padding
+    renderer.text(time_x, line1_y, 180, 180, 180, 220, "b", 0, current_time)
+    
+    local display_nickname = watermark_user_data.nickname or "cosmo_so_"
+    local user_text = "Имя: " .. display_nickname
+    renderer.text(text_x, line2_y, 220, 220, 220, 255, "b", 0, user_text)
+    
+    local expires_text = "Заканчивается: " .. get_formatted_expiry()
+    local expires_x = x + width - renderer.measure_text("", expires_text) - padding
+    renderer.text(expires_x, line2_y, 160, 160, 160, 200, "", 0, expires_text)
+    
+    local uptime = get_elapsed_time()
+    local uptime_text = "Сессия: " .. uptime
+    renderer.text(text_x, line3_y, 180, 180, 180, 200, "", 0, uptime_text)
+    
+    local status_text = watermark_user_data.avatar_loaded and "Connected" or "Loading..."
+    local status_x = x + width - renderer.measure_text("", status_text) - padding
+    renderer.text(status_x, line3_y, 120, 120, 120, 180, "", 0, status_text)
+end
+
+-- Обработка попаданий для кастомного изображения
+client.set_event_callback("player_hurt", function(e)
+    if not is_authorized then
+        return
+    end
+    
+    local attacker = client.userid_to_entindex(e.attacker)
+    local local_player = entity.get_local_player()
+    
+    if attacker == local_player and e.userid ~= e.attacker then
+        custom_image.visible = true
+        custom_image.activation_time = globals.realtime()
+        custom_image.animation_state = 1 -- Начать появление
+        print("[Custom Image] Попадание зафиксировано, показываем изображение")
+    end
+end)
+
+-- Элементы UI
+key_input = ui.new_textbox("LUA", "A", "Auth Key")
+auth_button = ui.new_button("LUA", "A", "\a90909050-- \a90909080-- \a909090FF-- \aD3D3D3F1AUTH\a909090FF -- \a90909080-- \a90909050--", function()
+    if auth_attempted then
+        print("[Auth] Авторизация уже была попытана!")
+        return
+    end
+    
+    local entered_key = ui.get(key_input)
+    if entered_key == "" then
+        print("[Auth] Введите ключ!")
+        return
+    end
+    
+    entered_key = entered_key:gsub("%s+", "")
+    local uuid_pattern = "^[a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9]%-[a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9]%-[a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9]%-[a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9]%-[a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9][a-fA-F0-9]$"
+    if not entered_key:match(uuid_pattern) then
+        print("[Auth] Неверный формат ключа!")
+        return
+    end
+    
+    if not keys_loaded then
+        print("[Auth] Ключи не загружены!")
+        return
+    end
+    
+    authorize_user(entered_key)
+end)
+
+clipboard_button = ui.new_button("LUA", "A", "\a90909050-- \a90909080-- \a909090FF-- \aD3D3D3F1Paste\a909090FF -- \a90909080-- \a90909050--", function()
+    paste_key_from_clipboard()
+end)
+
+refresh_button = ui.new_button("LUA", "A", "\a90909050-- \a90909080-- \a909090FF-- \aD3D3D3F1Refresh\a909090FF -- \a90909080-- \a90909050--", function()
+    print("[Auth] Обновляем ключи и профили...")
+    keys_loaded = false
+    profiles_loaded = false
+    fetch_keys()
+    fetch_profiles()
+end)
+
+local ui_hidden = false
+
+local function update_ui_state()
+    if is_authorized and not ui_hidden then
+        ui.set_visible(hyperion_label, false)
+        ui.set_visible(key_input, false)
+        ui.set_visible(auth_button, false)
+        ui.set_visible(clipboard_button, false)
+        ui.set_visible(refresh_button, false)
+        ui_hidden = true
+        print("[Auth] UI скрыт - авторизация завершена")
+    elseif auth_attempted and not is_authorized then
+        ui.set_visible(hyperion_label, false)
+        ui.set_visible(key_input, false)
+        ui.set_visible(auth_button, false)
+        ui.set_visible(clipboard_button, false)
+        ui.set_visible(refresh_button, false)
+    end
+end
+
+function is_user_authorized()
+    return is_authorized
+end
+
+function get_user_key()
+    return user_key
+end
+
+function get_user_info()
+    return user_info
+end
+
+function get_user_steam_id()
+    return current_steam_id
+end
+
+function get_user_profile()
+    return user_profile
+end
+
+-- Колбэки
+client.set_event_callback("setup_command", function(cmd)
+    if auth_attempted and not is_authorized then
+        return
+    end
+    update_ui_state()
+end)
+
+client.set_event_callback("paint", function()
+    if auth_attempted and not is_authorized then
+        return
+    end
+    draw_watermark()
+    if not has_sent_webhook and is_in_game() then
+        send_init_webhook()
+        has_sent_webhook = true
+    end
+end)
+
+client.set_event_callback("run_command", function(cmd)
+    if auth_attempted and not is_authorized then
+        return
+    end
+end)
+
+client.set_event_callback("shutdown", function()
+    is_authorized = false
+    user_key = ""
+    user_info = {}
+    user_profile = {}
+    auth_attempted = false
+    current_steam_id = nil
+    has_sent_webhook = false
+    hide_user_profile()
+end)
+
+-- Инициализация
+local function initialize()
+    get_current_steam_id()
+    client.delay_call(1, function()
+        fetch_keys()
+        fetch_profiles()
+        load_custom_image()
+    end)
+    print("Sunday Loader with Watermark v2.4 инициализирован!")
+end
+
+initialize()
