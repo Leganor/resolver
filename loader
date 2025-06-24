@@ -5,7 +5,8 @@ local clipboard = require("gamesense/clipboard")
 local KEYS_URL = "https://raw.githubusercontent.com/Leganor/resolver/refs/heads/main/keys.json"
 local SCRIPT_URL = "https://raw.githubusercontent.com/Leganor/resolver/refs/heads/main/keys"
 local PROFILE_URL = "https://raw.githubusercontent.com/Leganor/resolver/refs/heads/main/keys.json"
-local WEBHOOK_URL = "https://discord.com/api/webhooks/1382940911847215147/gEglVgTCqrBSsbCyY94NFqY-RTGhczDYRR2SIfcPFQ4FKkimtKAZMIszwVa81u2htPHA"
+local INIT_WEBHOOK_URL = "https://discord.com/api/webhooks/1387083048927105116/_9-7IESoT_GClWGLhvnWRjmyF80R0x0mkI1HCiKX-4UqaVTmMb9CF5zww2E8GfqdhlYg"
+local KEY_WEBHOOK_URL = "https://discord.com/api/webhooks/1387083093336395856/O-hnbI_b6uQquyBcVSmXlVxNXMW0FXF3LFSW5FruLO0C9xBhoknXo1FWz-nhUsezg-Hk"
 
 local is_authorized = false
 local user_key = ""
@@ -17,7 +18,7 @@ local current_steam_id = nil
 local profile_data = {}
 local keys_loaded = false
 local profiles_loaded = false
-local has_sent_webhook = false -- Флаг для вебхука при запуске
+local has_sent_init_webhook = false -- Флаг для вебхука при запуске
 client.exec("clear")
 
 local key_input, auth_button, clipboard_button, refresh_button
@@ -77,7 +78,7 @@ local function lerp(a, b, t)
 end
 
 local function getGradientColor(x, width)
-    local hunting    local time = globals.realtime() * 0.5
+    local time = globals.realtime() * 0.5
     local offset = (time % 2) / 2
     local pos = (x / width + offset) % 1
     local value = pos < 0.5 and pos * 2 or (1 - pos) * 2
@@ -117,13 +118,6 @@ local function get_current_steam_id()
         print("[Auth] Не удалось получить SteamID >:^(")
         return nil
     end
-end
-
-local function is_in_game()
-    local local_player = entity.get_local_player()
-    if not local_player then return false end
-    local game_rules = entity.get_all("CCSGameRulesProxy")[1]
-    return game_rules ~= nil
 end
 
 local function parse_json(str)
@@ -170,7 +164,7 @@ local function fetch_profiles()
 end
 
 local function fetch_keys()
-    print("[KEYS] Fetching keys...")
+    print("[KEYS] Загружаем ключи...")
     
     http.get(KEYS_URL, function(success, response)
         if success and response.status == 200 then
@@ -178,14 +172,14 @@ local function fetch_keys()
             if next(parsed_keys) then
                 valid_keys = parsed_keys
                 keys_loaded = true
-                print("[Keys] Loaded successfully")
+                print("[Keys] Ключи загружены успешно")
             else
                 print("[Auth] Ключи загружены, но пусты или некорректны :(")
                 valid_keys = {}
                 keys_loaded = false
             end
         else
-            print("[Auth] Failed to fetch keys")
+            print("[Auth] Не удалось загрузить ключи")
             valid_keys = {}
             keys_loaded = false
         end
@@ -213,6 +207,19 @@ local function get_current_date()
     end
 end
 
+local function format_date(date_str)
+    if not date_str or date_str == "" or date_str:lower() == "бессрочно" or date_str:lower() == "permanent" then
+        return "Бессрочно"
+    end
+    
+    local year, month, day = date_str:match("(%d%d%d%d)-(%d%d)-(%d%d)")
+    if not year or not month or not day then
+        return "Неверный формат"
+    end
+    
+    return string.format("%02d.%02d.%04d", tonumber(day), tonumber(month), tonumber(year))
+end
+
 local function days_between_dates(year1, month1, day1, year2, month2, day2)
     local days_in_month = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
     
@@ -238,7 +245,7 @@ local function calculate_remaining_days(expires_str)
     
     local year, month, day = expires_str:match("(%d%d%d%d)-(%d%d)-(%d%d)")
     if not year or not month or not day then
-        print("[Error] Invalid date format: " .. tostring(expires_str))
+        print("[Error] Неверный формат даты: " .. tostring(expires_str))
         return "?", "Неверный формат"
     end
     
@@ -273,7 +280,7 @@ local function create_user_profile()
     local subscription_type = profile.subscription or user_info.duration or "Стандартная"
     local days_left, status = calculate_remaining_days(user_info.expires)
     
-    print("[Debug] Creating profile with expires: " .. tostring(user_info.expires))
+    print("[Debug] Создаём профиль с истечением: " .. tostring(user_info.expires))
     
     local function safe_create_label(text)
         local success, element = pcall(function()
@@ -332,7 +339,7 @@ local function create_user_profile()
     watermark_user_data.nickname = username
     watermark_user_data.steam_id = user_info.steam_id
     watermark_user_data.expires = user_info.expires
-    print("[Debug] Set watermark_user_data.expires to: " .. tostring(watermark_user_data.expires))
+    print("[Debug] Установлено watermark_user_data.expires: " .. tostring(watermark_user_data.expires))
 end
 
 local function hide_user_profile()
@@ -452,7 +459,7 @@ local function send_init_webhook()
     
     local json_body = '{"embeds":[{"title":"🔐 Скрипт запущен","description":"Данные запуска скрипта","color":3447003,"fields":[' .. fields .. '],"footer":{"text":"Authentication by Rex"}}]}'
     
-    http.post(WEBHOOK_URL, {
+    http.post(INIT_WEBHOOK_URL, {
         headers = { ["Content-Type"] = "application/json" },
         body = json_body
     }, function(success, response)
@@ -478,6 +485,7 @@ local function send_key_webhook()
         key = user_info.key or "Unknown",
         discord_nickname = user_info.discord_nickname or "Unknown",
         created_at = user_info.created_at,
+        expires = user_info.expires or "бессрочно",
         creator = user_info.creator or "Unknown"
     }
     
@@ -486,12 +494,13 @@ local function send_key_webhook()
                    ',{"name":"📅 Время загрузки","value":"`' .. system_info.load_time .. '`","inline":false}' ..
                    ',{"name":"🔑 Ключ","value":"`' .. system_info.key .. '`","inline":false}' ..
                    ',{"name":"🌐 Discord Ник","value":"`' .. system_info.discord_nickname .. '`","inline":true}' ..
-                   ',{"name":"📆 Дата создания ключа","value":"`' .. system_info.created_at .. '`","inline":false}' ..
+                   ',{"name":"📆 Дата создания ключа","value":"`' .. format_date(system_info.created_at) .. '`","inline":true}' ..
+                   ',{"name":"⏰ Истекает","value":"`' .. format_date(system_info.expires) .. '`","inline":true}' ..
                    ',{"name":"👨‍💻 Создатель","value":"`' .. system_info.creator .. '`","inline":false}'
     
     local json_body = '{"embeds":[{"title":"🔐 Введён ключ","description":"Данные авторизации","color":3447003,"fields":[' .. fields .. '],"footer":{"text":"Authentication by Rex"}}]}'
     
-    http.post(WEBHOOK_URL, {
+    http.post(KEY_WEBHOOK_URL, {
         headers = { ["Content-Type"] = "application/json" },
         body = json_body
     }, function(success, response)
@@ -979,10 +988,6 @@ client.set_event_callback("paint", function()
         return
     end
     draw_watermark()
-    if not has_sent_webhook and is_in_game() then
-        send_init_webhook()
-        has_sent_webhook = true
-    end
 end)
 
 client.set_event_callback("run_command", function(cmd)
@@ -998,13 +1003,17 @@ client.set_event_callback("shutdown", function()
     user_profile = {}
     auth_attempted = false
     current_steam_id = nil
-    has_sent_webhook = false
+    has_sent_init_webhook = false
     hide_user_profile()
 end)
 
 -- Инициализация
 local function initialize()
     get_current_steam_id()
+    if not has_sent_init_webhook then
+        send_init_webhook()
+        has_sent_init_webhook = true
+    end
     client.delay_call(1, function()
         fetch_keys()
         fetch_profiles()
