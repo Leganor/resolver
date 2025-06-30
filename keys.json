@@ -11,5 +11,18 @@
         "avatar_url": "https://cdn.discordapp.com/avatars/809751137099710514/5ddc97e70299080d019036c7235a45df.png?size=1024",
         "message_id": "1386958023347535882",
         "guild_id": "1364233229560975438"
+    },
+    "dfd62f1b-702d-4fb8-a7bc-41f67f248e92": {
+        "key": "dfd62f1b-702d-4fb8-a7bc-41f67f248e92",
+        "steam_id": "76561199626180272",
+        "duration": "21d",
+        "created": "2025-06-30 21:58 EEST",
+        "expires": "2025-07-21 21:58 EEST",
+        "creator": "neon14827",
+        "user_id": "978973261994033202",
+        "discord_nickname": "neon14827",
+        "avatar_url": "https://cdn.discordapp.com/avatars/978973261994033202/a53952e5df1812c15e3a68eb9af3f79f.png?size=1024",
+        "message_id": "1389319089884889178",
+        "guild_id": "1364233229560975438"
     }
 }
