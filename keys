@@ -17,7 +17,8 @@ Last update 13.06.25
                      I8   8I                                                                              
                      `8, ,8I                                                                              
                       `Y8P"                                                                               
-
+-- by AlaraK
+-- old версия
 local sosimoihui = require("suck.my/dick")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ]]
 local ffi = require('ffi')
 local bit = require("bit")
@@ -679,7 +680,7 @@ client.color_log(225, 225, 225, "--------------------[WELCOME]------------------
 client.color_log(128, 128, 128, "    ")
 client.color_log(225, 225, 225, "Welcome to IMMORTAL!")
 client.color_log(225, 225, 225, "In resolver will be some new functions")
-client.color_log(225, 225, 225, "Version - 1.0.0 [PRE-RELEASE V2]")
+client.color_log(225, 225, 225, "Version - 1.0.0 [PRE-PRE RELEASE]")
 client.color_log(128, 128, 128, "   ")
 client.color_log(225, 225, 225, "--------------------[CONTACTS]--------------------")
 client.color_log(128, 128, 128, "   ")
@@ -711,7 +712,7 @@ ui.new_label("LUA", "B", "                                        ")
 
 
 local local_player = entity.get_local_player()
-local player_name = local_player and entity.get_player_name(local_player) or "Tal'darim'4ick"
+local player_name = local_player and entity.get_player_name(local_player) or "AlaraK"
 ui.new_label("LUA", "B", "Welcome, \a778899FF" .. player_name .. "!!")
 ui.new_label("LUA", "B", "                                 ")
 
@@ -1334,369 +1335,13 @@ utils.rectangle = function(x, y, w, h, r, g, b, a, radius)
     renderer.circle((x + w) - radius, (y + h) - radius, r, g, b, a, radius, 0, 0.25)
 end
 
-
+-- урезал как просил
 local screen = {}
 screen.size = vector(client.screen_size())
 screen.center = vector(client.screen_size()) * 0.5
 
 
 local watermark = {}
-watermark.position = vector(screen.center.x - 150, screen.size.y - 30)
-watermark.size = vector(300, 20)
-watermark.alpha = 0
-watermark.custom_name = "IMMORTAL"
-watermark.elements = {"Nickname", "FPS", "Ping", "Time"}
-watermark.lock = "Bottom-Center"
-watermark.candy = true
-
-local colors = {}
-colors.watermark = {
-    Text = color(160, 120, 220, 185), --  фиол
-    Background = color(0, 0, 0, 77) -- 30%
-}
-
-
-local gradient = {}
-gradient.animated_gradient_text = function(text, colors, speed, a)
-    local output = ""
-    local length = #text
-    local time_offset = (utils.sine_yaw(globals.realtime() * speed, 5, 20) * speed) % 1
-    for i = 1, length do
-        local t = (((i - 1) / (length - 1)) + time_offset) % 1
-        local color = color.linear_gradient(colors, t)
-        color:alpha_modulate(utils.sine_yaw(((globals.framecount() / i) % 3) * (0.92 - (i % 5)), 100, 255))
-        output = output .. string.format("\a%02x%02x%02x%02x", color.r, color.g, color.b, color.a * a) .. text:sub(i, i)
-    end
-    return output
-end
-gradient.table = {
-    {color(244, 244, 244, 255), 0},
-    {color(115, 115, 115, 255), 0.5},
-    {color(233, 233, 233, 255), 1} 
-}
-
-
-local smoothed_fps = 0
-
-
-local function render_watermark()
-    local target_alpha = ui.get(ui_new_logs_enable) and 0 or 1
-    watermark.alpha = utils.lerp(watermark.alpha, target_alpha, 0.03)
-
-    if watermark.alpha <= 0.1 then return end
-
-    local player_name = entity.get_player_name(entity.get_local_player()) or "Unknown"
-    local current_fps = math.floor(1 / globals.frametime())
-    smoothed_fps = utils.lerp(smoothed_fps, current_fps, 0.1)
-    local ping = math.floor(entity.get_prop(entity.get_local_player(), "m_iPing") or 0)
-    local time_seconds = math.floor(globals.realtime()) % (24 * 3600)
-    local hours = math.floor(time_seconds / 3600)
-    local minutes = math.floor((time_seconds % 3600) / 60)
-    local time_str = string.format("%02d:%02d", hours, minutes)
-
-    local text = ""
-    if watermark.elements[1] then text = text .. (watermark.custom_name ~= "" and watermark.custom_name or player_name) .. " | " end
-    if watermark.elements[2] then text = text .. math.floor(smoothed_fps) .. " FPS | " end
-    if watermark.elements[3] then text = text .. ping .. "ms | " end
-    if watermark.elements[4] then text = text .. "Pre-release v2" end
-    text = text:gsub(" | $", "")
-
-    local measure = vector(renderer.measure_text("d", text))
-    local x, y
-    if watermark.lock == "Bottom-Center" then
-        x = screen.center.x - (measure.x / 2)
-        y = screen.size.y - watermark.size.y - 10
-    else
-        x = watermark.position.x
-        y = watermark.position.y
-    end
-
-
-    local bg_color = colors.watermark.Background:alpha_modulate(watermark.alpha * 180)
-    utils.rectangle(x - 5, y - 2, measure.x + 10, watermark.size.y + 4, bg_color.r, bg_color.g, bg_color.b, bg_color.a, 5)
-
-
-    local text_color = colors.watermark.Text:alpha_modulate(watermark.alpha * 255)
-    if watermark.candy then
-        text = gradient.animated_gradient_text(text, gradient.table, 1.5, watermark.alpha)
-    else
-        text = string.format("\a%02x%02x%02x%02x%s", text_color.r, text_color.g, text_color.b, text_color.a * watermark.alpha, text)
-    end
-    renderer.text(x, y + (watermark.size.y / 2) - (measure.y / 2), 0, 0, 0, 0, "d", 0, text)
-end
-
-client.set_event_callback("paint", render_watermark)
-
-local ffi = require('ffi')
-local pui = require('gamesense/pui')
-local surface = require('gamesense/surface')
-
-local a = function (...) return ... end
-
-local surface_create_font = surface.create_font
-local verdana = surface_create_font('Verdana', 12, 400, {})
-
-
-
-
-local A_1 = {
-    A_2 = panorama.open("CSGOHud").MyPersonaAPI.GetName(),
-    A_3 = "DEBUG",
-}
-
-
-local color do
-    local helpers = {
-        RGBtoHEX = a(function (col, short)
-            return string.format(short and "%02X%02X%02X" or "%02X%02X%02X%02X", col.r, col.g, col.b, col.a)
-        end),
-        HEXtoRGB = a(function (hex)
-            hex = string.gsub(hex, "^#", "")
-            return tonumber(string.sub(hex, 1, 2), 16), tonumber(string.sub(hex, 3, 4), 16), tonumber(string.sub(hex, 5, 6), 16), tonumber(string.sub(hex, 7, 8), 16) or 255
-        end)
-    }
-
-    local create
-    local mt = {
-        __eq = a(function (a, b)
-            return a.r == b.r and a.g == b.g and a.b == b.b and a.a == b.a
-        end),
-        lerp = a(function (f, t, w)
-            return create(f.r + (t.r - f.r) * w, f.g + (t.g - f.g) * w, f.b + (t.b - f.b) * w, f.a + (t.a - f.a) * w)
-        end),
-        to_hex = helpers.RGBtoHEX,
-        alphen = a(function (self, a, r)
-            return create(self.r, self.g, self.b, r and a * self.a or a)
-        end),
-    } mt.__index = mt
-
-    create = ffi.metatype(ffi.typeof("struct { uint8_t r; uint8_t g; uint8_t b; uint8_t a; }"), mt)
-
-    color = setmetatable({
-        rgb = a(function (r, g, b, a)
-            r = math.min(r or 255, 255)
-            return create(r, g and math.min(g, 255) or r, b and math.min(b, 255) or r, a and math.min(a, 255) or 255)
-        end),
-        hex = a(function (hex)
-            local r, g, b, a = helpers.HEXtoRGB(hex)
-            return create(r, g, b, a)
-        end)
-    }, {
-        __call = a(function (self, r, g, b, a)
-            return type(r) == "string" and self.hex(r) or self.rgb(r, g, b, a)
-        end),
-    })
-end
-
-local colors = {
-    text = color.rgb(230), 
-    panel = {
-        l1 = color.rgb(30, 30, 30, 180), 
-    }
-}
-
-
-local DPI, _DPI = 1, {}
-local sw, sh = client.screen_size()
-local asw, ash = sw, sh
-local sc = {x = sw * .5, y = sh * .5}
-local asc = {x = asw * .5, y = ash * .5}
-
-
-local render do
-    local alpha = 1
-    local astack = {}
-    local measurements = setmetatable({}, { __mode = "kv" })
-    local dpi_flag = ""
-    local dpi_ref = ui.reference("MISC", "Settings", "DPI scale")
-    local blurs = setmetatable({}, {__mode = "kv"})
-
-    _DPI.scalable = false
-    _DPI.callback = function ()
-        local old = DPI
-        DPI = _DPI.scalable and tonumber(ui.get(dpi_ref):sub(1, -2)) * .01 or 1
-        sw, sh = client.screen_size()
-        sw, sh = sw / DPI, sh / DPI
-        sc.x, sc.y = sw * .5, sh * .5
-        dpi_flag = DPI ~= 1 and "d" or ""
-    end
-    _DPI.callback()
-    ui.set_callback(dpi_ref, _DPI.callback)
-
-    local function check_screen()
-        if sw == 0 or sh == 0 then
-            _DPI.callback()
-            asw, ash = client.screen_size()
-            sw, sh = client.screen_size()
-        else
-            client.unset_event_callback("paint_ui", check_screen)
-        end
-    end
-    client.set_event_callback("paint_ui", check_screen)
-
-    client.set_event_callback("paint", function ()
-        for i = 1, #blurs do
-            local v = blurs[i]
-            if v then renderer.blur(v[1], v[2], v[3], v[4]) end
-        end
-        table.clear(blurs)
-    end)
-    client.set_event_callback("paint_ui", function ()
-        table.clear(blurs)
-    end)
-
-    local F = math.floor
-
-    render = setmetatable({
-        push_alpha = a(function (v)
-            local len = #astack
-            astack[len+1] = v
-            alpha = alpha * astack[len+1] * (astack[len] or 1)
-            if len > 255 then error "alpha stack exceeded 255 objects" end
-        end),
-        pop_alpha = a(function ()
-            local len = #astack
-            astack[len], len = nil, len-1
-            alpha = len == 0 and 1 or astack[len] * (astack[len-1] or 1)
-        end),
-        get_alpha = a(function () return alpha end),
-
-        blur = a(function (x, y, w, h, a)
-            if (a or 1) * alpha > .25 then
-                blurs[#blurs+1] = {F(x * DPI), F(y * DPI), F(w * DPI), F(h * DPI)}
-            end
-        end),
-        rectangle = a(function (x, y, w, h, c, n)
-            x, y, w, h, n = F(x * DPI), F(y * DPI), F(w * DPI), F(h * DPI), n and F(n * DPI) or 0
-            local r, g, b, a = c.r, c.g, c.b, c.a * alpha
-            if n == 0 then
-                renderer.rectangle(x, y, w, h, r, g, b, a)
-            else
-                renderer.circle(x + n, y + n, r, g, b, a, n, 180, 0.25)
-                renderer.rectangle(x + n, y, w - n - n, n, r, g, b, a)
-                renderer.circle(x + w - n, y + n, r, g, b, a, n, 90, 0.25)
-                renderer.rectangle(x, y + n, w, h - n - n, r, g, b, a)
-                renderer.circle(x + n, y + h - n, r, g, b, a, n, 270, 0.25)
-                renderer.rectangle(x + n, y + h - n, w - n - n, n, r, g, b, a)
-                renderer.circle(x + w - n, y + h - n, r, g, b, a, n, 0, 0.25)
-            end
-        end),
-        text = a(function (x, y, c, flags, width, ...)
-            renderer.text(x * DPI, y * DPI, c.r, c.g, c.b, c.a * alpha, (flags or "") .. dpi_flag, width or 0, ...)
-        end),
-        measure_text = a(function (flags, text)
-            if not text or text == "" then return 0, 0 end
-            text = text:gsub("\a%x%x%x%x%x%x%x%x", "")
-            flags = flags or ""
-            local key = string.format("<%s>%s", flags, text)
-            if not measurements[key] or measurements[key][1] == 0 then
-                measurements[key] = { renderer.measure_text(flags, text) }
-            end
-            return measurements[key][1], measurements[key][2]
-        end),
-    }, {__index = renderer})
-end
-
-
-local anima do
-    local animators = setmetatable({}, {__mode = "kv"})
-    local frametime, g_speed = globals.absoluteframetime(), 1
-
-    math.clamp = function (x, a, b) if a > x then return a elseif b < x then return b else return x end end
-
-    anima = {
-        pulse = 0,
-        easings = {
-            pow = {
-                function (x, p) return 1 - ((1 - x) ^ (p or 3)) end,
-                function (x, p) return x ^ (p or 3) end,
-                function (x, p) return x < 0.5 and 4 * math.pow(x, p or 3) or 1 - math.pow(-2 * x + 2, p or 3) * 0.5 end,
-            }
-        },
-        lerp = a(function (a, b, s, t)
-            local c = a + (b - a) * frametime * (s or 8) * g_speed
-            return math.abs(b - c) < (t or .005) and b or c
-        end),
-        condition = a(function (id, c, s, e)
-            local ctx = id[1] and id or animators[id]
-            if not ctx then animators[id] = { c and 1 or 0, c }; ctx = animators[id] end
-            s = s or 4
-            local cur_s = type(s) == "table" and (c and s[1] or s[2]) or s
-            ctx[1] = math.clamp(ctx[1] + (frametime * math.abs(cur_s) * g_speed * (c and 1 or -1)), 0, 1)
-            return (ctx[1] % 1 == 0 or cur_s < 0) and ctx[1] or
-                anima.easings.pow[e and (c and e[1][1] or e[2][1]) or (c and 1 or 3)](ctx[1], e and (c and e[1][2] or e[2][2]) or 3)
-        end)
-    }
-
-    client.set_event_callback("paint_ui", function ()
-        anima.pulse = math.abs(globals.realtime() * 1 % 2 - 1)
-        frametime = globals.absoluteframetime()
-    end)
-end
-
-
-local hud = {}
-hud.watermark = {
-    x = sw - 120, y = 24, w = 160, h = 24,
-    alpha = 0, offset_x = 20, progress = {0}, offset_progress = {0},
-    items = {
-        {
-            0, function (self, x, y)
-                local cname = A_1.A_2
-                local t = string.format(A_1.A_3 == "DEBUG" and "%s" or "%s %s%02x— %s",
-                    cname ~= "" and cname or A_1.A_2, "\aFFFFFF", render.get_alpha() * self[1] * 255, A_1.A_3)
-                local tw, th = render.measure_text("", t)
-                if self[1] > 0 then
-                    render.blur(x, y + 1, tw + 16, 22, 1)
-                    render.rectangle(x, y + 1, tw + 16, 22, colors.panel.l1, 4)
-                    render.text(x + 8, y + 6, colors.text, nil, nil, t)
-                end
-                return true, tw + 16
-            end, {}
-        },
-        {
-            0, function (self, x, y)
-                local hours, minutes = client.system_time()
-                local text = string.format("%02d:%02d", hours, minutes)
-                local tw, th = render.measure_text("", text)
-                if self[1] > 0 then
-                    render.blur(x, y + 1, tw + 16, 22, 1)
-                    render.rectangle(x, y + 1, tw + 16, 22, colors.panel.l1, 4)
-                    render.text(x + 8, y + 6, colors.text, nil, nil, text)
-                end
-                return true, tw + 16
-            end, {}
-        },
-    },
-    enumerate = function (self)
-        local total = 0
-        for i, v in ipairs(self.items) do
-            render.push_alpha(v[1])
-            local state, length = v[2](v, self.x + total + self.offset_x, self.y)
-            render.pop_alpha()
-            v[1] = anima.condition(v[3], state, 2, {{1, 3}, {3, 3}})
-            total = total + (length + 2) * v[1]
-        end
-        self.w = anima.lerp(self.w, total, 10, .5)
-    end,
-    update = function (self)
-        self.alpha = anima.condition(self.progress, true, 2, {{1, 3}, {3, 3}})
-        self.offset_x = anima.lerp(self.offset_x, 0, 10, .01)
-        return self.alpha
-    end,
-    paint = function (self)
-        render.push_alpha(self.alpha)
-        self:enumerate()
-        render.pop_alpha()
-    end
-}
-
-
-client.set_event_callback("paint_ui", function ()
-    hud.watermark:update()
-    hud.watermark:paint()
-end)
-
 
 local default_elements = {
     ui_elements.prediction_factor,
@@ -3772,8 +3417,7 @@ end
                                 plist.set(enemy, "Force body yaw value", clamp(final_yaw, -60, 60))
                             end
 --                        end)
-                        plist.set(enemy, "Force body yaw", false)
-                        plist.set(enemy, "Override preferred hitbox", nil)
+                        client.color_log(128, 128, 128, "    ")
                     else
                         if is_visible then
                             plist.set(enemy, "Force body yaw", true)
