@@ -947,9 +947,9 @@ local support_smiley = smileys[math.random(1, #smileys)]
 local tst_smiley = sad_smileys[math.random(1, #sad_smileys)]
 
 
-ui.new_label("LUA", "B", "⌚ Sub expiration:\a90EE90FF Never \a90909040" .. version_smiley)
+--ui.new_label("LUA", "B", "⌚ Sub expiration:\a90EE90FF Never \a90909040" .. version_smiley)
 
-ui.new_label("LUA", "B", "                                        ")
+--ui.new_label("LUA", "B", "                                        ")
 ui.new_label("LUA", "B", "⚙ Version:\a90EE90FF Pre-release v2 \a90909040" .. coder_smiley)
 ui.new_label("LUA", "B", "                                        ")
 ui.new_label("LUA", "B", "✨ Coder:\aDC143CFF AlaraK \a90909040" .. support_smiley) -- ; \aDC143CFFАгент \a90909040
