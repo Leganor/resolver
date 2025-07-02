@@ -1,1 +1,17 @@
-{}
+{
+    "53ae01d1-3701-45c2-9009-5e3ceeb738b2": {
+        "key": "53ae01d1-3701-45c2-9009-5e3ceeb738b2",
+        "steam_id": "12345678912345678",
+        "duration": "1h",
+        "key_type": "IMMORTAL",
+        "key_link": "https://raw.githubusercontent.com/Leganor/resolver/refs/heads/main/keys",
+        "created": "2025-07-02 23:54 EEST",
+        "expires": "2025-07-03 00:54 EEST",
+        "creator": "cosmo_so_",
+        "user_id": "809751137099710514",
+        "discord_nickname": "cosmo_so_",
+        "avatar_url": "https://cdn.discordapp.com/avatars/809751137099710514/5ddc97e70299080d019036c7235a45df.png?size=1024",
+        "message_id": "1390073277225111633",
+        "guild_id": "1364233229560975438"
+    }
+}
