@@ -73,5 +73,20 @@
         "avatar_url": "https://cdn.discordapp.com/avatars/809751137099710514/5ddc97e70299080d019036c7235a45df.png?size=1024",
         "message_id": "1390444872250560605",
         "guild_id": "1381688709942083694"
+    },
+    "c54143d3-3ee7-46ba-a2c5-27e30941f46e": {
+        "key": "c54143d3-3ee7-46ba-a2c5-27e30941f46e",
+        "steam_id": "76561199447657042",
+        "duration": "1h",
+        "key_type": "Hellrise",
+        "key_link": "https://raw.githubusercontent.com/Leganor/hellrise/refs/heads/main/keys",
+        "created": "2025-07-04 00:34 EEST",
+        "expires": "2025-07-04 01:34 EEST",
+        "creator": "cosmo_so_",
+        "user_id": "809751137099710514",
+        "discord_nickname": "cosmo_so_",
+        "avatar_url": "https://cdn.discordapp.com/avatars/809751137099710514/5ddc97e70299080d019036c7235a45df.png?size=1024",
+        "message_id": "1390445588750794834",
+        "guild_id": "1381688709942083694"
     }
 }
