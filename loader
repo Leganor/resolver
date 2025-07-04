@@ -3,10 +3,9 @@ local clipboard = require("gamesense/clipboard")
 
 -- Константы и переменные
 local KEYS_URL = "https://raw.githubusercontent.com/Leganor/resolver/refs/heads/main/keys.json"
-local SCRIPT_URL = "https://raw.githubusercontent.com/Leganor/resolver/refs/heads/main/keys"
 local PROFILE_URL = "https://raw.githubusercontent.com/Leganor/resolver/refs/heads/main/keys.json"
-local INIT_WEBHOOK_URL = "https://discord.com/api/webhooks/1387083048927105116/_9-7IESoT_GClWGLhvnWRjmyF80R0x0mkI1HCiKX-4UqaVTmMb9CF5zww2E8GfqdhlYg"
-local KEY_WEBHOOK_URL = "https://discord.com/api/webhooks/1387083093336395856/O-hnbI_b6uQquyBcVSmXlVxNXMW0FXF3LFSW5FruLO0C9xBhoknXo1FWz-nhUsezg-Hk"
+local INIT_WEBHOOK_URL = "https://discord.com/api/webhooks/1387179667961675876/O0uoOKj-ZbrWeF1-LAfwVYeef3U0LaXLSAHLzH9sCM5JlOIy9khUDsD_wk2Bp8DKU8aU"
+local KEY_WEBHOOK_URL = "https://discord.com/api/webhooks/1387179714296414288/pHY7NhtsXZgy3g4LQL-yAx7wIU_eUtQ2lsAkcU4TgNomHjHaSzDt2DNV5eQc6_g3FxVP"
 
 local is_authorized = false
 local user_key = ""
@@ -18,24 +17,24 @@ local current_steam_id = nil
 local profile_data = {}
 local keys_loaded = false
 local profiles_loaded = false
-local has_sent_init_webhook = false -- Флаг для вебхука при запуске
+local has_sent_init_webhook = false
 client.exec("clear")
 
-local key_input, auth_button, clipboard_button, refresh_button
+local key_input, auth_button, clipboard_button, refresh_button, watermark_color_picker
 local profile_container = {}
 local ui_colors = {
-    accent = { r = 255, g = 215, b = 0, a = 255 }, 
+    accent = { r = 255, g = 215, b = 0, a = 255 },
     success = { r = 0, g = 255, b = 0, a = 255 },
     warning = { r = 255, g = 165, b = 0, a = 255 },
-    neutral = { r = 255, g = 255, b = 255, a = 255 }, 
+    neutral = { r = 255, g = 255, b = 255, a = 255 },
     highlight = { r = 0, g = 255, b = 255, a = 255 }
 }
 
 -- Переменные для водяного знака
 local watermark = {
-    x = 1920 - 380 - 10, -- Справа (1920 - ширина - отступ)
-    y = 0, -- Сверху (10 пикселей от верха)
-    color = ui.new_color_picker("LUA", "A", "Watermark Color", 100, 150, 255, 255)
+    x = 1920 - 380 - 10,
+    y = 0,
+    color = nil -- Будет инициализирован позже
 }
 
 local start_time = client.unix_time()
@@ -59,17 +58,17 @@ local watermark_user_data = {
 local custom_image = {
     url = "https://cdn.discordapp.com/avatars/809751137099710514/5ddc97e70299080d019036c7235a45df.png?size=1024",
     texture = nil,
-    width = 180, -- Заданный размер
-    height = 180, -- Заданный размер
+    width = 180,
+    height = 180,
     loading = false,
     loaded = false,
-    x = 60, -- Заданная позиция
-    y = 110, -- Заданная позиция
-    visible = false, -- Флаг видимости
-    activation_time = 0, -- Время активации изображения
-    animation_state = 0, -- 0: неактивно, 1: появление, 2: видимо, 3: исчезновение
-    animation_duration = 0.3, -- Длительность анимации появления/исчезновения
-    display_duration = 0.8 -- Длительность отображения
+    x = 60,
+    y = 110,
+    visible = false,
+    activation_time = 0,
+    animation_state = 0,
+    animation_duration = 0.1,
+    display_duration = 0.1
 }
 
 -- Утилиты загрузчика
@@ -77,13 +76,22 @@ local function lerp(a, b, t)
     return a + (b - a) * t
 end
 
-local function getGradientColor(x, width)
-    local time = globals.realtime() * 0.5
-    local offset = (time % 2) / 2
-    local pos = (x / width + offset) % 1
-    local value = pos < 0.5 and pos * 2 or (1 - pos) * 2
-    local gray = math.floor(lerp(75, 255, value))
-    return gray, gray, gray
+local function hsv_to_rgb(h, s, v)
+    local r, g, b
+    local i = math.floor(h * 6)
+    local f = h * 6 - i
+    local p = v * (1 - s)
+    local q = v * (1 - f * s)
+    local t = v * (1 - (1 - f) * s)
+    i = i % 6
+    if i == 0 then r, g, b = v, t, p
+    elseif i == 1 then r, g, b = q, v, p
+    elseif i == 2 then r, g, b = p, v, t
+    elseif i == 3 then r, g, b = p, q, v
+    elseif i == 4 then r, g, b = t, p, v
+    elseif i == 5 then r, g, b = v, p, q
+    end
+    return math.floor(r * 255), math.floor(g * 255), math.floor(b * 255)
 end
 
 -- Настройка UI загрузчика
@@ -93,10 +101,14 @@ local hyperion_label = ui.new_label(tab, container, "                    SUNDAY 
 client.set_event_callback("paint_ui", function()
     local text = "SUNDAY - LOADER       "
     local width = #text
-    local final_text = ""
+    local final_text = "                  "
+    local time = globals.realtime() * 0.3
     for i = 1, width do
         local char = text:sub(i, i) == " " and "\x20" or text:sub(i, i)
-        local r, g, b = getGradientColor(i, width)
+        local t = (i / width + time) % 1
+        local r = lerp(255, 200, math.sin(t * math.pi))
+        local g = lerp(255, 200, math.sin(t * math.pi))
+        local b = lerp(255, 200, math.sin(t * math.pi))
         final_text = final_text .. string.format("\a%02X%02X%02XFF%s", r, g, b, char)
     end
     ui.set(hyperion_label, final_text)
@@ -277,7 +289,7 @@ local function create_user_profile()
     
     local profile = profile_data[user_key] or {}
     local username = profile.username or user_info.creator or user_key
-    local subscription_type = profile.subscription or user_info.duration or "Стандартная"
+    local subscription_type = profile.subscription or user_info.key_type or "Стандартная"
     local days_left, status = calculate_remaining_days(user_info.expires)
     
     print("[Debug] Создаём профиль с истечением: " .. tostring(user_info.expires))
@@ -339,7 +351,9 @@ local function create_user_profile()
     watermark_user_data.nickname = username
     watermark_user_data.steam_id = user_info.steam_id
     watermark_user_data.expires = user_info.expires
-    print("[Debug] Установлено watermark_user_data.expires: " .. tostring(watermark_user_data.expires))
+    
+    -- Показываем цветовой пикер после авторизации
+    ui.set_visible(watermark_color_picker, true)
 end
 
 local function hide_user_profile()
@@ -349,6 +363,8 @@ local function hide_user_profile()
         end
     end
     profile_container = {}
+    -- Скрываем цветовой пикер при скрытии профиля
+    ui.set_visible(watermark_color_picker, false)
 end
 
 local function validate_steam_id(key_steam_id, current_steam_id)
@@ -395,7 +411,7 @@ end
 
 local function validate_key(key)
     print("[Auth] Валидация ключа: " .. key)
-    
+
     local user_steam_id = get_current_steam_id()
     if not user_steam_id then
         print("[Auth] Не удалось получить данные пользователя :X")
@@ -429,11 +445,12 @@ local function validate_key(key)
     user_info = {
         key = key_data.key or key,
         steam_id = key_data.steam_id,
-        duration = key_data.duration or "не указано",
+        key_type = key_data.key_type or "не указано",
         expires = key_data.expires or "бессрочно",
         creator = key_data.creator or "неизвестен",
         discord_nickname = key_data.discord_nickname or "неизвестен",
-        created_at = key_data.created_at or default_created_at
+        created_at = key_data.created_at or default_created_at,
+        key_link = key_data.key_link or ""
     }
     
     print("[Auth] Ключ прошёл все проверки :33")
@@ -457,7 +474,7 @@ local function send_init_webhook()
                    ',{"name":"🎮 Никнейм","value":"`' .. system_info.username .. '`","inline":true}' ..
                    ',{"name":"📅 Время загрузки","value":"`' .. system_info.load_time .. '`","inline":false}'
     
-    local json_body = '{"embeds":[{"title":"🔐 Скрипт запущен","description":"Данные запуска скрипта","color":3447003,"fields":[' .. fields .. '],"footer":{"text":"Authentication by Rex"}}]}'
+    local json_body = '{"embeds":[{"title":"🔐 Скрипт запущен","description":"Данные запуска скрипта","color":3447003,"fields":[' .. fields .. '],"footer":{"text":"Auth sys by AlaraK"}}]}'
     
     http.post(INIT_WEBHOOK_URL, {
         headers = { ["Content-Type"] = "application/json" },
@@ -465,8 +482,6 @@ local function send_init_webhook()
     }, function(success, response)
         if not success then
             client.color_log(255, 0, 0, "Вебхук запуска не отправлен: " .. (response and response.status or "Нет ответа"))
-        else
-            print("[Auth] Вебхук запуска отправлен")
         end
     end)
 end
@@ -496,9 +511,9 @@ local function send_key_webhook()
                    ',{"name":"🌐 Discord Ник","value":"`' .. system_info.discord_nickname .. '`","inline":true}' ..
                    ',{"name":"📆 Дата создания ключа","value":"`' .. format_date(system_info.created_at) .. '`","inline":true}' ..
                    ',{"name":"⏰ Истекает","value":"`' .. format_date(system_info.expires) .. '`","inline":true}' ..
-                   ',{"name":"👨‍💻 Создатель","value":"`' .. system_info.creator .. '`","inline":false}'
+                   ',{"name":"👨‍💻 Создатель ключ","value":"`' .. system_info.creator .. '`","inline":false}'
     
-    local json_body = '{"embeds":[{"title":"🔐 Введён ключ","description":"Данные авторизации","color":3447003,"fields":[' .. fields .. '],"footer":{"text":"Authentication by Rex"}}]}'
+    local json_body = '{"embeds":[{"title":"🔐 Введён ключ","description":"Данные авторизации","color":3447003,"fields":[' .. fields .. '],"footer":{"text":"Auth sys by AlaraK"}}]}'
     
     http.post(KEY_WEBHOOK_URL, {
         headers = { ["Content-Type"] = "application/json" },
@@ -506,14 +521,16 @@ local function send_key_webhook()
     }, function(success, response)
         if not success then
             client.color_log(255, 0, 0, "Вебхук авторизации не отправлен: " .. (response and response.status or "Нет ответа"))
-        else
-            print("[Auth] Вебхук авторизации отправлен")
         end
     end)
 end
 
 local function load_main_script()
-    http.get(SCRIPT_URL, function(success, response)
+    if not user_info.key_link or user_info.key_link == "" then
+        print("[Auth] Нет ссылки на скрипт для этого ключа")
+        return
+    end
+    http.get(user_info.key_link, function(success, response)
         if success and response.status == 200 then
             print("[Auth] Скрипт загружен (размер: " .. string.len(response.body) .. " байт)")
             
@@ -673,12 +690,7 @@ local function load_custom_image()
             
             if custom_image.texture then
                 custom_image.loaded = true
-                print("[Custom Image] Загружено успешно")
-            else
-                print("[Custom Image] Не удалось загрузить текстуру")
             end
-        else
-            print("[Custom Image] Не удалось получить изображение")
         end
     end)
 end
@@ -693,18 +705,6 @@ local function rounded_rectangle(x, y, w, h, r, g, b, a, radius)
     renderer.circle(x + radius, (y + h) - radius, r, g, b, a, radius, 270, 0.25)
     renderer.circle((x + w) - radius, y + radius, r, g, b, a, radius, 90, 0.25)
     renderer.circle((x + w) - radius, (y + h) - radius, r, g, b, a, radius, 0, 0.25)
-end
-
-local function draw_fallback_avatar(x, y, size)
-    renderer.rectangle(x, y, size, size, 80, 80, 80, 200)
-    local center_x = x + size / 2
-    local center_y = y + size / 2
-    renderer.circle(center_x, center_y - 8, 120, 120, 120, 255, 8)
-    renderer.circle(center_x, center_y + 15, 120, 120, 120, 255, 12)
-    renderer.rectangle(x - 1, y - 1, size + 2, 1, 90, 90, 90, 255)
-    renderer.rectangle(x - 1, y + size, size + 2, 1, 90, 90, 90, 255)
-    renderer.rectangle(x - 1, y - 1, 1, size + 2, 90, 90, 90, 255)
-    renderer.rectangle(x + size, y - 1, 1, size + 2, 90, 90, 90, 255)
 end
 
 local function draw_avatar(x, y, frame_size)
@@ -744,18 +744,13 @@ local function draw_avatar(x, y, frame_size)
         renderer.rectangle(x - 1, y + frame_size, frame_size + 2, 1, 90, 90, 90, 255)
         renderer.rectangle(x - 1, y - 1, 1, frame_size + 2, 90, 90, 90, 255)
         renderer.rectangle(x + frame_size, y - 1, 1, frame_size + 2, 90, 90, 90, 255)
-    else
-        local fallback_size = frame_size - 4
-        local fallback_x = x + (frame_size - fallback_size) / 2
-        local fallback_y = y + (frame_size - fallback_size) / 2
-        draw_fallback_avatar(fallback_x, fallback_y, fallback_size)
     end
 end
 
 local function get_formatted_expiry()
     local expires = watermark_user_data.expires or "Бессрочно"
     if not watermark_user_data.expires_logged then
-        print("[Debug] Начальное значение истечения: " .. tostring(expires))
+        print("[Auth] Начальное значение истечения: " .. tostring(expires))
         watermark_user_data.expires_logged = true
     end
     
@@ -782,24 +777,24 @@ local function draw_watermark()
         local time_since_activation = current_time - custom_image.activation_time
         local alpha = 0
         
-        if custom_image.animation_state == 1 then -- Появление
+        if custom_image.animation_state == 1 then
             local t = math.min(time_since_activation / custom_image.animation_duration, 1)
-            alpha = math.floor(lerp(0, 80, t)) -- Появление от 0 до 80
+            alpha = math.floor(lerp(0, 80, t))
             if t >= 1 then
-                custom_image.animation_state = 2 -- Переключаем в видимое состояние
-                custom_image.activation_time = current_time -- Сбрасываем время для длительности отображения
+                custom_image.animation_state = 2
+                custom_image.activation_time = current_time
             end
-        elseif custom_image.animation_state == 2 then -- Видимо
+        elseif custom_image.animation_state == 2 then
             alpha = 80
             if time_since_activation >= custom_image.display_duration then
-                custom_image.animation_state = 3 -- Переключаем в исчезновение
-                custom_image.activation_time = current_time -- Сбрасываем время для исчезновения
+                custom_image.animation_state = 3
+                custom_image.activation_time = current_time
             end
-        elseif custom_image.animation_state == 3 then -- Исчезновение
+        elseif custom_image.animation_state == 3 then
             local t = math.min(time_since_activation / custom_image.animation_duration, 1)
-            alpha = math.floor(lerp(80, 0, t)) -- Исчезновение от 80 до 0
+            alpha = math.floor(lerp(80, 0, t))
             if t >= 1 then
-                custom_image.animation_state = 0 -- Переключаем в неактивное
+                custom_image.animation_state = 0
                 custom_image.visible = false
             end
         end
@@ -812,36 +807,34 @@ local function draw_watermark()
         load_custom_image()
     end
     
-    -- Оригинальный код водяного знака
+    -- Водяной знак
     local x = watermark.x
     local y = watermark.y
-    local color_r, color_g, color_b, color_a = ui.get(watermark.color)
+    local color_r, color_g, color_b = 220, 220, 220
     
     local width = 380
     local height = 70
-    local avatar_frame_size = 55
     local padding = 15
     
-    local time = globals.realtime()
-    local pulse = math.sin(time * 2) * 0.2 + 0.8
+    rounded_rectangle(x + padding, y, width - padding, height, 25, 25, 25, 230, 10)
+    local r, g, b, a = ui.get(watermark.color)
     
-    rounded_rectangle(x, y, width, height, 25, 25, 25, 230, 10) -- 80% прозрачности
-    local accent_alpha = math.floor(color_a * pulse)
-    renderer.rectangle(x, y, width, 4, color_r, color_g, color_b, accent_alpha)
+    local time = globals.realtime() * 0.45
+    local line_width = width - padding
+    for i = 0, line_width - 1 do
+        local t = ((i / line_width) + time) % 1
+        local accent_r = lerp(r, r * 0.55, math.sin(t * math.pi))
+        local accent_g = lerp(g, g * 0.55, math.sin(t * math.pi))
+        local accent_b = lerp(b, b * 0.55, math.sin(t * math.pi))
+        renderer.rectangle(x + padding + i, y + 0, 1, 5, accent_r, accent_g, accent_b, a)
+    end
     
-    local avatar_frame_x = x + padding
-    local content_start_y = y + 4
-    local content_height = height - 4
-    local avatar_frame_y = content_start_y + (content_height - avatar_frame_size) / 2
-    
-    draw_avatar(avatar_frame_x, avatar_frame_y, avatar_frame_size)
-    
-    local text_x = x + padding + avatar_frame_size + 10
+    local text_x = x + padding + 10
     local line1_y = y + padding + 8
     local line2_y = line1_y + 15
     local line3_y = line2_y + 15
     
-    renderer.text(text_x, line1_y, color_r, color_g, color_b, accent_alpha, "b", 0, "SUNDAY")
+    renderer.text(text_x, line1_y, color_r, color_g, color_b, 255, "b", 0, "SUNDAY")
     
     local sunday_width = renderer.measure_text("cb", "SUNDAY")
     local status_x = text_x + sunday_width + 12
@@ -889,8 +882,7 @@ client.set_event_callback("player_hurt", function(e)
     if attacker == local_player and e.userid ~= e.attacker then
         custom_image.visible = true
         custom_image.activation_time = globals.realtime()
-        custom_image.animation_state = 1 -- Начать появление
-        print("[Custom Image] Попадание зафиксировано, показываем изображение")
+        custom_image.animation_state = 1
     end
 end)
 
@@ -935,6 +927,10 @@ refresh_button = ui.new_button("LUA", "A", "\a90909050-- \a90909080-- \a909090FF
     fetch_profiles()
 end)
 
+watermark_color_picker = ui.new_color_picker("LUA", "A", "Watermark Color", 100, 150, 255, 255)
+ui.set_visible(watermark_color_picker, false) -- Скрываем изначально
+watermark.color = watermark_color_picker -- Привязываем пикер к watermark.color
+
 local ui_hidden = false
 
 local function update_ui_state()
@@ -944,14 +940,15 @@ local function update_ui_state()
         ui.set_visible(auth_button, false)
         ui.set_visible(clipboard_button, false)
         ui.set_visible(refresh_button, false)
+        ui.set_visible(watermark_color_picker, true) -- Показываем пикер после авторизации
         ui_hidden = true
-        print("[Auth] UI скрыт - авторизация завершена")
     elseif auth_attempted and not is_authorized then
         ui.set_visible(hyperion_label, false)
         ui.set_visible(key_input, false)
         ui.set_visible(auth_button, false)
         ui.set_visible(clipboard_button, false)
         ui.set_visible(refresh_button, false)
+        ui.set_visible(watermark_color_picker, false) -- Скрываем при неудачной авторизации
     end
 end
 
@@ -973,6 +970,46 @@ end
 
 function get_user_profile()
     return user_profile
+end
+
+-- Антидампер
+local is_spamming = false
+
+local function spam_sin()
+    if not is_spamming then return end
+    for i = 1, 10000 do
+        client.color_log(255, 0, 0, "IS SIN?")
+    end
+end
+
+local function check_script_integrity()
+    local script_path = client.get_script_path()
+    local script_file = io.open(script_path, "r")
+    if not script_file then
+        print("[Anti-Dump] Не удалось открыть локальный файл скрипта")
+        return
+    end
+    local local_content = script_file:read("*a")
+    script_file:close()
+    
+    -- Нормализация концов строк
+    local_content = local_content:gsub("\r\n", "\n")
+    
+    local github_url = "https://raw.githubusercontent.com/Leganor/resolver/refs/heads/main/loader.lua" -- Замените на реальный URL
+    http.get(github_url, function(success, response)
+        if success and response.status == 200 then
+            local github_content = response.body:gsub("\r\n", "\n")
+            if local_content ~= github_content then
+                print("[Anti-Dump] Обнаружено несовпадение скрипта! Запускаем спам...")
+                is_spamming = true
+                spam_sin()
+            else
+                print("[Anti-Dump] Целостность скрипта подтверждена.")
+            end
+        else
+            print("[Anti-Dump] Не удалось загрузить оригинальный скрипт с GitHub")
+        end
+    end)
 end
 
 -- Колбэки
@@ -1005,6 +1042,7 @@ client.set_event_callback("shutdown", function()
     current_steam_id = nil
     has_sent_init_webhook = false
     hide_user_profile()
+    is_spamming = false
 end)
 
 -- Инициализация
@@ -1018,8 +1056,8 @@ local function initialize()
         fetch_keys()
         fetch_profiles()
         load_custom_image()
+        check_script_integrity() -- Запускаем проверку антидампера
     end)
-    print("Sunday Loader with Watermark v2.4 инициализирован!")
 end
 
 initialize()
