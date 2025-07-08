@@ -216,20 +216,20 @@ local label_enabled_custom = ui.new_label("LUA", "B", "           \a90EE90FFACTI
 ui.new_label("LUA", "B", "                                        ")
 
 
--- local imp_exp_2 = ui.new_label("LUA", "A", "\a909090FF ---------------- T 3 M P 3 S T ----------------")
+-- local imp_exp_2 = ui.new_label("CONFIG", "LUA", "\a909090FF ---------------- T 3 M P 3 S T ----------------")
 -- local ui_display_stats = ui.new_checkbox("LUA", "B", " ›  Enemy \a778899FFStats \aFF0000FF[dev]")
 -- local ui_toggle_logs = ui.new_checkbox("LUA", "B", " ›  Enable \a778899FFLogs")
-local darkmode_enabled = ui.new_checkbox("LUA", "A", "\a778899FF \aD3D3D3FFEnable \a778899FFDark Menu \a90909025", true)
--- local ui_trashtalk_enable = ui.new_checkbox("LUA", "A", " ›  Enable \a778899FFTrasktalk ")
+local darkmode_enabled = ui.new_checkbox("CONFIG", "LUA", "\a778899FF \aD3D3D3FFEnable \a778899FFDark Menu \a90909025", true)
+-- local ui_trashtalk_enable = ui.new_checkbox("CONFIG", "LUA", " ›  Enable \a778899FFTrasktalk ")
 -- local imp_exp_3 = ui.new_label("Rage", "Other", "\a909090FF ---------------- T 3 M P 3 S T ----------------")
 
 -- local label_z3r0 = ui.new_label("Rage", "Other", "\a90909040-- Dont turn it on if IMMORTAL is already enabled !", false)
 
 math.randomseed(client.random_int(1, 1000000))
 
-local trashtalk_enabled = ui.new_checkbox("LUA", "A", "\a778899FF \aD3D3D3FFEnable \a778899FFAnti 1 \a90909025")
+local trashtalk_enabled = ui.new_checkbox("CONFIG", "LUA", "\a778899FF \aD3D3D3FFEnable \a778899FFAnti 1 \a90909025")
 
-local ui_new_logs_enable = ui.new_checkbox("LUA", "A", "\a778899FF \aD3D3D3FFEnable \a778899FFInfo \a90909025")
+local ui_new_logs_enable = ui.new_checkbox("CONFIG", "LUA", "\a778899FF \aD3D3D3FFEnable \a778899FFInfo \a90909025")
 
 local fixed_opacity_percent = 45
 local current_alpha = 0
@@ -352,10 +352,10 @@ local ui_elements = {
 }
 
 
- -- local imp_exp_1 = ui.new_label("Lua", "A", "\a909090FF ---------------- P R E S E T S ----------------")
+ -- local imp_exp_1 = ui.new_label("CONFIG", "LUA", "\a909090FF ---------------- P R E S E T S ----------------")
 local config_menu = {
-    import = ui.new_button("Lua", "A", "\a909090FF Import Config ", function() end),
-    export = ui.new_button("LUA", "A", "\a909090FF Export Config ", function() end)
+    import = ui.new_button("CONFIG", "LUA", "\a909090FF Import Config ", function() end),
+    export = ui.new_button("CONFIG", "LUA", "\a909090FF Export Config ", function() end)
 }
 
 
@@ -1186,7 +1186,7 @@ local function hsv_to_rgb(h, s, v)
 end
 
 
-local my_label = ui.new_label("LUA", "A", "Last update: ??.??.??")
+local my_label = ui.new_label("CONFIG", "LUA", "Last update: ??.??.??")
 
 local speed = 1 
 local color1 = {255, 0, 255}
