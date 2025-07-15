@@ -1,25 +1,14 @@
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          --[[ 
-Last update 13.06.25
+local best_resolver_by_alarak = "thanks for using this resolver <3"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          --[[ 
+Last update 08.07.25
 
-                                             ,ggg,                                        ,ggg,        gg 
-        ,dPYb,                              dP""8I   ,dPYb,                              dP""Y8b       dP 
-        IP'`Yb                             dP   88   IP'`Yb                              Yb, `88      d8' 
-        I8  8I                            dP    88   I8  8I                               `"  88    ,dP'  
-        I8  8'                           ,8'    88   I8  8'                                   88aaad8"    
-        I8 dP      gg     gg             d88888888   I8 dP    ,gggg,gg   ,gggggg,    ,gggg,gg 88""""Yb,   
-        I8dP   88ggI8     8I            ,8"     88   I8dP    dP"  "Y8I   dP""""8I   dP"  "Y8I 88     "8b  
-        I8P    8I  I8,   ,8I      dP"  ,8P      Y8   I8P    i8'    ,8I  ,8'    8I  i8'    ,8I 88      `8i 
-       ,d8b,  ,8I ,d8b, ,d8I      Yb,_,dP       `8b,,d8b,_ ,d8,   ,d8b,,dP     Y8,,d8,   ,d8b,88       Yb,
- 𝒎𝒂𝒅𝒆 8P'"Y88P"' P""Y88P"888      "Y8P"         `Y88P'"Y88P"Y8888P"`Y88P      `Y8P"Y8888P"`Y888        Y8    :)
-                        ,d8I'                                                                             
-                      ,dP'8I                                                                             
-                     ,8"  8I                                                                              
-                     I8   8I                                                                              
-                     `8, ,8I                                                                              
-                      `Y8P"                                                                               
--- by AlaraK
--- old версия
-local sosimoihui = require("suck.my/dick")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ]]
+██████╗░██╗░░░██╗  ░█████╗░██╗░░░░░░█████╗░██████╗░░█████╗░██╗░░██╗
+██╔══██╗╚██╗░██╔╝  ██╔══██╗██║░░░░░██╔══██╗██╔══██╗██╔══██╗██║░██╔╝
+██████╦╝░╚████╔╝░  ███████║██║░░░░░███████║██████╔╝███████║█████═╝░
+██╔══██╗░░╚██╔╝░░  ██╔══██║██║░░░░░██╔══██║██╔══██╗██╔══██║██╔═██╗░
+██████╦╝░░░██║░░░  ██║░░██║███████╗██║░░██║██║░░██║██║░░██║██║░╚██╗
+╚═════╝░░░░╚═╝░░░  ╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝                                                                
+
+local sosihui = require("suck.dick")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ]]
 local ffi = require('ffi')
 local bit = require("bit")
 local vector = require('vector')
@@ -27,7 +16,7 @@ local table_new = require('table.new')
 local json = require("json")
 local clipboard = require("gamesense/clipboard")
 local color = require("gamesense/color")
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          --[[
+-- тут по фану добавил
 local pui = require('gamesense/pui')
 local base64 = require('gamesense/base64')
 local clipboard = require('gamesense/clipboard')
@@ -35,12 +24,106 @@ local c_entity = require ('gamesense/entity')
 local http = require ('gamesense/http')
 local vector = require "vector"
 local steamworks = require('gamesense/steamworks')
-local surface = require 'gamesense/surface'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ]]                                                                                     
+local surface = require 'gamesense/surface'     
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          --[[
+ds: neon14827
+tg: @Dobrewo
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ]]                                                                                     
+local ent_c = {}
+-- не сильно используеться, но добавил ⬇
+ent_c.get_client_entity = vtable_bind('client.dll', 'VClientEntityList003', 3, 'void*(__thiscall*)(void*, int)')
 
-resolver_data = {}
+local animation_layer_t = ffi.typeof([[
+    struct {
+        char pad0[0x18];
+        uint32_t m_nSequence;
+        float m_flPrevCycle;
+        float m_flWeight;
+        float m_flWeightDeltaRate;
+        float m_flPlaybackRate;
+        float m_flCycle;
+        void* entity;
+        char pad1[0x4];
+    }**
+]])
+
+local offsets = {
+    animlayer = 0x2990
+}
+
+local function get_animlayer(ent, layer)
+    local ent_ptr = ffi.cast('void***', ent_c.get_client_entity(ent or entity.get_local_player()))
+    local animlayer_ptr = ffi.cast('char*', ent_ptr) + offsets.animlayer
+    local entity_animlayer = ffi.cast(animation_layer_t, animlayer_ptr)[0][layer]
+    return entity_animlayer
+end
+
+local function normalize(value, min, max)
+    return (value - min) / (max - min)
+end
+
+local function bin_value(value, num_bits)
+    local scale_factor = 2 ^ num_bits
+    local scaled_value = math.floor(value * scale_factor + 0.5)
+    local bits = {}
+    for i = num_bits, 1, -1 do
+        local bit_value = 2 ^ (i - 1)
+        if scaled_value >= bit_value then
+            bits[i] = 1
+            scaled_value = scaled_value - bit_value
+        else
+            bits[i] = 0
+        end
+    end
+    return bits
+end
+
+local function insert_first_index(tbl, value, maxSize)
+    if #tbl >= maxSize then
+        table.remove(tbl)
+    end
+    table.insert(tbl, 1, value)
+end
+
+local function average(t)
+    t = t or {}
+    local sum = 0
+    for _, v in pairs(t) do
+        sum = sum + v
+    end
+    return sum / #t
+end
+
+
+local animlayer_average_t = {}
+local animlayer_rec_t = {}
+local velocity_rec_t = {}
+
+local function get_animlayer_rec(ent)
+    animlayer_rec_t[ent] = animlayer_rec_t[ent] or 0
+    return animlayer_rec_t[ent]
+end
+
+local function get_velocity_rec(ent)
+    velocity_rec_t[ent] = velocity_rec_t[ent] or 0
+    return velocity_rec_t[ent]
+end
+
+
+-- local mul, binary_size = 1000000000, 20
+
+
+
+local function table_contains(tbl, val)
+    for _, v in ipairs(tbl) do
+        if v == val then return true end
+    end
+    return false
+end
+
 local RESOLVER_CONST = {
     MAX_DESYNC_DELTA = 58,
-    JITTER_DETECTION_THRESHOLD = 40,
+    JITTER_DETECTION_THRESHOLD = 30,
     MAX_HISTORY_SIZE = 64
 }
 
@@ -76,6 +159,38 @@ local function get_choke(enemy)
     data.last_sim_time = sim_time
     resolver_data[enemy] = data
     return choke
+end
+
+-- !!
+local function init_brute_data(player)
+    if not brute_data[player] then
+        brute_data[player] = {
+            state = "IDLE",
+            yaw_index = 1,
+            body_yaw_index = 1,
+            pitch_index = 1,
+            misses = 0,
+            last_shot_time = 0,
+            end_tick = 0
+        }
+    end
+end
+
+local function get_closest_point(A, B, P)
+    local a_to_p = { P[1] - A[1], P[2] - A[2] }
+    local a_to_b = { B[1] - A[1], B[2] - A[2] }
+    local atb2 = a_to_b[1]^2 + a_to_b[2]^2
+    local atp_dot_atb = a_to_p[1]*a_to_b[1] + a_to_p[2]*a_to_b[2]
+    local t = atp_dot_atb / atb2
+    return { A[1] + a_to_b[1]*t, A[2] + a_to_b[2]*t }
+end
+
+local function adaptive_adjust(player, current_yaw)
+    local data = brute_data[player]
+    if not data then return current_yaw end
+    local desync = entity.get_prop(player, "m_flPoseParameter", 11) * 120 - 60
+    local adjustment = desync > 0 and math.random(-5, 5) or -math.random(-5, 5)
+    return normalize_angle(current_yaw + adjustment)
 end
 
 local function normalize_angle(angle)
@@ -131,7 +246,7 @@ end
 
 function log_debug(message)
     if adaptive_resolver.debug_mode then
-        client.log("[IMMORTAL Logs] " .. tostring(message))
+        client.color_log(255, 255, 255, "[IMMORTAL Logs] " .. tostring(message))
     end
 end
 
@@ -177,6 +292,14 @@ local ui_colors = {
     warning = { r = 255, g = 165, b = 0, a = 255 },
     neutral = { r = 255, g = 255, b = 255, a = 255 }, 
     highlight = { r = 0, g = 255, b = 255, a = 255 }
+}
+
+local brute_data = {}
+
+local brute_angles = {
+    yaw = {0, 10, -10, 20, -20, 30, -30, 40, -40, 50, -50, 60, -60, 75, -75, 90, -90, 105, -105, 120, -120, 135, -135, 150, -150, 165, -165, 180},
+    body_yaw = {0, 10, -10, 20, -20, 30, -30, 45, -45, 60, -60, 75, -75},
+    pitch = {89, 84, 79, 74, 69, 64, 94, 99, 104, 109, -89, -84, -79, -74, -69, -64, -94, -99, -104, -109}
 }
 
 local function contains(t, value)
@@ -268,7 +391,6 @@ client.set_event_callback("paint", function()
     renderer.text(10, 10, 255, 255, 255, 255, "", 0, resolver_text)
 end)
 
-
 local ui_elements = {
     tst_prediction_factor = ui.new_checkbox("LUA", "B", " Base Prediction", 0, 200, 50, true, "%", 1, { [150] = "Fast Mode Max" }, true),
     prediction_factor = ui.new_slider("LUA", "B", "\a909090FFPrediction Aggressiveness", 0, 200, 50, true, "%", 1, { [150] = "Fast Mode Max" }),
@@ -286,7 +408,7 @@ local ui_elements = {
 --    yaw_diff_threshold = ui.new_slider("LUA", "B", "\a909090FFYaw Diff \aD3D3D3FFThreshold", 0, 180, 60, true, "°"),
     desync_detection = ui.new_checkbox("LUA", "B", "\ac7d667FF⛕ Desync Detection"),
 --    desync_range = ui.new_slider("LUA", "B", "\a909090FFDesync Range\a909090FF", 0, 60, 45, true, "°"),
-    headshot_priority = ui.new_checkbox("LUA", "B", "\a67d77cFF Headshot Priority \a90909025«\a90909035hs\a90909025»"),
+    headshot_priority = ui.new_checkbox("LUA", "B", "\a67d77cFF Headshot Priority \a90909025«\a90909035hc\a90909025»"),
     head_height_adjust = ui.new_slider("LUA", "B", "\a909090FFHead Height Adjust\a909090FF", 0, 100, 50, true, "u"),
 --    defensive_resolver = ui.new_checkbox("LUA", "B", "\a67d77cFF Air Defensive Type Logic \a90909025«\affef00FF⁎\a90909025»", false),
 --    hit_chance_bind = ui.new_hotkey("LUA", "B", "Toggle Hit Chance Override", false),
@@ -300,6 +422,8 @@ local ui_elements = {
 --    neural_mode = ui.new_checkbox("LUA", "B", "\aDC143CFF Neural Mode \a778899FF AI \a90909025«\aFF0000FF‼\a90909025»"),
 --    neural_priority = ui.new_combobox("LUA", "B", "Neural Priority", {"Yaw", "Position", "Desync"}),
     enhanced_defensive_fix = ui.new_checkbox("LUA", "B", "\a67d77cFF Enhanced Defensive Fix\a67d77cFF \a90909025«\affef00FF⁎\a90909025»"),
+    a_brute = ui.new_checkbox("LUA", "B", "\aD0B0FFFF Basic Brute\a909090FF"),
+    brute_duration = ui.new_slider("LUA", "B", "\a909090FFBrute Duration", 1, 20, 5, true, "t"),
 --    adaptive_auto_switch = ui.new_checkbox("LUA", "B", "\a67d77cFF Adaptive Auto Switch Angles \a90909025«\a90909020dont work\a90909025»"),
 --    adaptive_learning_rate = ui.new_slider("LUA", "B", "\a909090FFAdaptive Learning Rate", 0, 100, 20, true, "%"),
     alternative_jitter = ui.new_checkbox("LUA", "B", "\aD0B0FFFF Alternative \aD3D3D3FFDetect Jitter"),
@@ -373,8 +497,8 @@ local ui_clear_resolver_memory = ui.new_button("PLAYERS", "Adjustments", "\a9090
     debug_info = {}
     hit = {}
     missed = {}
-    resolver.player_data = setmetatable({}, { __mode = "v" })
-    resolver.stats = {
+    resolver_player_data = setmetatable({}, { __mode = "v" })
+    resolver_stats = {
         total_hits = 0,
         total_misses = 0,
         hits_by_method = {},
@@ -393,19 +517,19 @@ local ui_clear_resolver_memory = ui.new_button("PLAYERS", "Adjustments", "\a9090
             unregister_shot = 0
         }
     }
-    resolver.aa_memory = setmetatable({}, { __mode = "kv" })
-    resolver.anim_cache = setmetatable({}, { __mode = "k" })
-    resolver.miss_memory = setmetatable({}, { __mode = "kv" })
-    resolver.last_shot_id = {}
-    resolver.target_player = nil
+    resolver_aa_memory = setmetatable({}, { __mode = "kv" })
+    resolver_anim_cache = setmetatable({}, { __mode = "k" })
+    resolver_miss_memory = setmetatable({}, { __mode = "kv" })
+    resolver_last_shot_id = {}
+    resolver_target_player = nil
 
-    
-
+    -- бля ну это ваще пиздец хахаах
+--[[
     for _, enemy in ipairs(entity.get_players(true)) do
         plist.set(enemy, "Force body yaw", false)
         plist.set(enemy, "Override preferred hitbox", nil)
     end
-    
+    ]]--
     client.color_log(0, 255, 0, "[IMMORTAL] All resolver memory and player data cleared successfully")
 end)
 
@@ -674,13 +798,13 @@ client.color_log(225, 225, 225, "███▌  ███   ███   ███
 client.color_log(225, 225, 225, "███   ███   ███   ███  ███   ███   ███ ███    ███ ▀███████████     ███       ███    ███ ███       ")
 client.color_log(225, 225, 225, "███   ███   ███   ███  ███   ███   ███ ███    ███   ███    ███     ███       ███    ███ ███▌    ▄ ")
 client.color_log(225, 225, 225, "█▀     ▀█   ███   █▀    ▀█   ███   █▀   ▀██████▀    ███    ███    ▄████▀     ███    █▀  █████▄▄██ ")
-client.color_log(225, 225, 225, "                                                    ███    ███                                    ")
+-- ███    ███
 client.color_log(128, 128, 128, "    ")
 client.color_log(225, 225, 225, "--------------------[WELCOME]---------------------")
 client.color_log(128, 128, 128, "    ")
 client.color_log(225, 225, 225, "Welcome to IMMORTAL!")
 client.color_log(225, 225, 225, "In resolver will be some new functions")
-client.color_log(225, 225, 225, "Version - 1.0.0 [PRE-PRE RELEASE]")
+client.color_log(225, 225, 225, "Version - 1.0.0 [RELEASE]")
 client.color_log(128, 128, 128, "   ")
 client.color_log(225, 225, 225, "--------------------[CONTACTS]--------------------")
 client.color_log(128, 128, 128, "   ")
@@ -706,15 +830,13 @@ client.color_log(128, 128, 128, "   ")
 -- client.color_log(128, 128, 128, "   ")
 client.color_log(225, 225, 225, "--------------------[CONSOLE]---------------------")
 client.color_log(128, 128, 128, "   ")
-client.color_log(225, 225, 225, "[IMMORTAL Logs] Pre-release: may be bugs")
-client.color_log(128, 128, 128, "   ")
 ui.new_label("LUA", "B", "                                        ")
 
 
 local local_player = entity.get_local_player()
-local player_name = local_player and entity.get_player_name(local_player) or "AlaraK"
+local player_name = local_player and entity.get_player_name(local_player) or "Tal'darim'4ick"
 ui.new_label("LUA", "B", "Welcome, \a778899FF" .. player_name .. "!!")
-ui.new_label("LUA", "B", "                                 ")
+--ui.new_label("LUA", "B", "                                 ")
 
 
 local enemy_data = {}
@@ -947,10 +1069,10 @@ local support_smiley = smileys[math.random(1, #smileys)]
 local tst_smiley = sad_smileys[math.random(1, #sad_smileys)]
 
 
---ui.new_label("LUA", "B", "⌚ Sub expiration:\a90EE90FF Never \a90909040" .. version_smiley)
+-- ui.new_label("LUA", "B", "⌚ Sub expiration:\a90EE90FF Never \a90909040" .. version_smiley)
 
---ui.new_label("LUA", "B", "                                        ")
-ui.new_label("LUA", "B", "⚙ Version:\a90EE90FF Pre-release v2 \a90909040" .. coder_smiley)
+ui.new_label("LUA", "B", "                                        ")
+ui.new_label("LUA", "B", "⚙ Version:\a90EE90FF Release \a90909040" .. coder_smiley)
 ui.new_label("LUA", "B", "                                        ")
 ui.new_label("LUA", "B", "✨ Coder:\aDC143CFF AlaraK \a90909040" .. support_smiley) -- ; \aDC143CFFАгент \a90909040
 ui.new_label("LUA", "B", "                                        ")
@@ -1212,9 +1334,9 @@ end
 
 
 client.set_event_callback("paint_ui", function()
-    local text = " Last update: 13.06.25"
+    local text = " Last update: 08.07.25"
     local prefix = "\aD3D3D399 Last Update: " 
-    local gradient_part = "13.06.25"
+    local gradient_part = "08.07.25"
     local width = 8
     local final_text = prefix
     local gradient_count = 0 
@@ -1335,13 +1457,369 @@ utils.rectangle = function(x, y, w, h, r, g, b, a, radius)
     renderer.circle((x + w) - radius, (y + h) - radius, r, g, b, a, radius, 0, 0.25)
 end
 
--- урезал как просил
+
 local screen = {}
 screen.size = vector(client.screen_size())
 screen.center = vector(client.screen_size()) * 0.5
 
 
 local watermark = {}
+watermark.position = vector(screen.center.x - 150, screen.size.y - 30)
+watermark.size = vector(300, 20)
+watermark.alpha = 0
+watermark.custom_name = "IMMORTAL"
+watermark.elements = {"Nickname", "FPS", "Ping", "Time"}
+watermark.lock = "Bottom-Center"
+watermark.candy = true
+
+local colors = {}
+colors.watermark = {
+    Text = color(160, 120, 220, 185), --  фиол
+    Background = color(0, 0, 0, 77) -- 30%
+}
+
+
+local gradient = {}
+gradient.animated_gradient_text = function(text, colors, speed, a)
+    local output = ""
+    local length = #text
+    local time_offset = (utils.sine_yaw(globals.realtime() * speed, 5, 20) * speed) % 1
+    for i = 1, length do
+        local t = (((i - 1) / (length - 1)) + time_offset) % 1
+        local color = color.linear_gradient(colors, t)
+        color:alpha_modulate(utils.sine_yaw(((globals.framecount() / i) % 3) * (0.92 - (i % 5)), 100, 255))
+        output = output .. string.format("\a%02x%02x%02x%02x", color.r, color.g, color.b, color.a * a) .. text:sub(i, i)
+    end
+    return output
+end
+gradient.table = {
+    {color(244, 244, 244, 255), 0},
+    {color(115, 115, 115, 255), 0.5},
+    {color(233, 233, 233, 255), 1} 
+}
+
+
+local smoothed_fps = 0
+
+
+local function render_watermark()
+    local target_alpha = ui.get(ui_new_logs_enable) and 0 or 1
+    watermark.alpha = utils.lerp(watermark.alpha, target_alpha, 0.03)
+
+    if watermark.alpha <= 0.1 then return end
+
+    local player_name = entity.get_player_name(entity.get_local_player()) or "Unknown"
+    local current_fps = math.floor(1 / globals.frametime())
+    smoothed_fps = utils.lerp(smoothed_fps, current_fps, 0.1)
+    local ping = math.floor(entity.get_prop(entity.get_local_player(), "m_iPing") or 0)
+    local time_seconds = math.floor(globals.realtime()) % (24 * 3600)
+    local hours = math.floor(time_seconds / 3600)
+    local minutes = math.floor((time_seconds % 3600) / 60)
+    local time_str = string.format("%02d:%02d", hours, minutes)
+
+    local text = ""
+    if watermark.elements[1] then text = text .. (watermark.custom_name ~= "" and watermark.custom_name or player_name) .. " | " end
+    if watermark.elements[2] then text = text .. math.floor(smoothed_fps) .. " FPS | " end
+    if watermark.elements[3] then text = text .. ping .. "ms | " end
+    if watermark.elements[4] then text = text .. "Release" end
+    text = text:gsub(" | $", "")
+
+    local measure = vector(renderer.measure_text("d", text))
+    local x, y
+    if watermark.lock == "Bottom-Center" then
+        x = screen.center.x - (measure.x / 2)
+        y = screen.size.y - watermark.size.y - 10
+    else
+        x = watermark.position.x
+        y = watermark.position.y
+    end
+
+
+    local bg_color = colors.watermark.Background:alpha_modulate(watermark.alpha * 180)
+    utils.rectangle(x - 5, y - 2, measure.x + 10, watermark.size.y + 4, bg_color.r, bg_color.g, bg_color.b, bg_color.a, 5)
+
+
+    local text_color = colors.watermark.Text:alpha_modulate(watermark.alpha * 255)
+    if watermark.candy then
+        text = gradient.animated_gradient_text(text, gradient.table, 1.5, watermark.alpha)
+    else
+        text = string.format("\a%02x%02x%02x%02x%s", text_color.r, text_color.g, text_color.b, text_color.a * watermark.alpha, text)
+    end
+    renderer.text(x, y + (watermark.size.y / 2) - (measure.y / 2), 0, 0, 0, 0, "d", 0, text)
+end
+
+client.set_event_callback("paint", render_watermark)
+--[[
+local ffi = require('ffi')
+local pui = require('gamesense/pui')
+local surface = require('gamesense/surface')
+
+local a = function (...) return ... end
+
+local surface_create_font = surface.create_font
+local verdana = surface_create_font('Verdana', 12, 400, {})
+
+
+
+
+local A_1 = {
+    A_2 = panorama.open("CSGOHud").MyPersonaAPI.GetName(),
+    A_3 = "DEBUG",
+}
+
+
+local color do
+    local helpers = {
+        RGBtoHEX = a(function (col, short)
+            return string.format(short and "%02X%02X%02X" or "%02X%02X%02X%02X", col.r, col.g, col.b, col.a)
+        end),
+        HEXtoRGB = a(function (hex)
+            hex = string.gsub(hex, "^#", "")
+            return tonumber(string.sub(hex, 1, 2), 16), tonumber(string.sub(hex, 3, 4), 16), tonumber(string.sub(hex, 5, 6), 16), tonumber(string.sub(hex, 7, 8), 16) or 255
+        end)
+    }
+
+    local create
+    local mt = {
+        __eq = a(function (a, b)
+            return a.r == b.r and a.g == b.g and a.b == b.b and a.a == b.a
+        end),
+        lerp = a(function (f, t, w)
+            return create(f.r + (t.r - f.r) * w, f.g + (t.g - f.g) * w, f.b + (t.b - f.b) * w, f.a + (t.a - f.a) * w)
+        end),
+        to_hex = helpers.RGBtoHEX,
+        alphen = a(function (self, a, r)
+            return create(self.r, self.g, self.b, r and a * self.a or a)
+        end),
+    } mt.__index = mt
+
+    create = ffi.metatype(ffi.typeof("struct { uint8_t r; uint8_t g; uint8_t b; uint8_t a; }"), mt)
+
+    color = setmetatable({
+        rgb = a(function (r, g, b, a)
+            r = math.min(r or 255, 255)
+            return create(r, g and math.min(g, 255) or r, b and math.min(b, 255) or r, a and math.min(a, 255) or 255)
+        end),
+        hex = a(function (hex)
+            local r, g, b, a = helpers.HEXtoRGB(hex)
+            return create(r, g, b, a)
+        end)
+    }, {
+        __call = a(function (self, r, g, b, a)
+            return type(r) == "string" and self.hex(r) or self.rgb(r, g, b, a)
+        end),
+    })
+end
+
+local colors = {
+    text = color.rgb(230), 
+    panel = {
+        l1 = color.rgb(30, 30, 30, 180), 
+    }
+}
+
+
+local DPI, _DPI = 1, {}
+local sw, sh = client.screen_size()
+local asw, ash = sw, sh
+local sc = {x = sw * .5, y = sh * .5}
+local asc = {x = asw * .5, y = ash * .5}
+
+
+local render do
+    local alpha = 1
+    local astack = {}
+    local measurements = setmetatable({}, { __mode = "kv" })
+    local dpi_flag = ""
+    local dpi_ref = ui.reference("MISC", "Settings", "DPI scale")
+    local blurs = setmetatable({}, {__mode = "kv"})
+
+    _DPI.scalable = false
+    _DPI.callback = function ()
+        local old = DPI
+        DPI = _DPI.scalable and tonumber(ui.get(dpi_ref):sub(1, -2)) * .01 or 1
+        sw, sh = client.screen_size()
+        sw, sh = sw / DPI, sh / DPI
+        sc.x, sc.y = sw * .5, sh * .5
+        dpi_flag = DPI ~= 1 and "d" or ""
+    end
+    _DPI.callback()
+    ui.set_callback(dpi_ref, _DPI.callback)
+
+    local function check_screen()
+        if sw == 0 or sh == 0 then
+            _DPI.callback()
+            asw, ash = client.screen_size()
+            sw, sh = client.screen_size()
+        else
+            client.unset_event_callback("paint_ui", check_screen)
+        end
+    end
+    client.set_event_callback("paint_ui", check_screen)
+
+    client.set_event_callback("paint", function ()
+        for i = 1, #blurs do
+            local v = blurs[i]
+            if v then renderer.blur(v[1], v[2], v[3], v[4]) end
+        end
+        table.clear(blurs)
+    end)
+    client.set_event_callback("paint_ui", function ()
+        table.clear(blurs)
+    end)
+
+    local F = math.floor
+
+    render = setmetatable({
+        push_alpha = a(function (v)
+            local len = #astack
+            astack[len+1] = v
+            alpha = alpha * astack[len+1] * (astack[len] or 1)
+            if len > 255 then error "alpha stack exceeded 255 objects" end
+        end),
+        pop_alpha = a(function ()
+            local len = #astack
+            astack[len], len = nil, len-1
+            alpha = len == 0 and 1 or astack[len] * (astack[len-1] or 1)
+        end),
+        get_alpha = a(function () return alpha end),
+
+        blur = a(function (x, y, w, h, a)
+            if (a or 1) * alpha > .25 then
+                blurs[#blurs+1] = {F(x * DPI), F(y * DPI), F(w * DPI), F(h * DPI)}
+            end
+        end),
+        rectangle = a(function (x, y, w, h, c, n)
+            x, y, w, h, n = F(x * DPI), F(y * DPI), F(w * DPI), F(h * DPI), n and F(n * DPI) or 0
+            local r, g, b, a = c.r, c.g, c.b, c.a * alpha
+            if n == 0 then
+                renderer.rectangle(x, y, w, h, r, g, b, a)
+            else
+                renderer.circle(x + n, y + n, r, g, b, a, n, 180, 0.25)
+                renderer.rectangle(x + n, y, w - n - n, n, r, g, b, a)
+                renderer.circle(x + w - n, y + n, r, g, b, a, n, 90, 0.25)
+                renderer.rectangle(x, y + n, w, h - n - n, r, g, b, a)
+                renderer.circle(x + n, y + h - n, r, g, b, a, n, 270, 0.25)
+                renderer.rectangle(x + n, y + h - n, w - n - n, n, r, g, b, a)
+                renderer.circle(x + w - n, y + h - n, r, g, b, a, n, 0, 0.25)
+            end
+        end),
+        text = a(function (x, y, c, flags, width, ...)
+            renderer.text(x * DPI, y * DPI, c.r, c.g, c.b, c.a * alpha, (flags or "") .. dpi_flag, width or 0, ...)
+        end),
+        measure_text = a(function (flags, text)
+            if not text or text == "" then return 0, 0 end
+            text = text:gsub("\a%x%x%x%x%x%x%x%x", "")
+            flags = flags or ""
+            local key = string.format("<%s>%s", flags, text)
+            if not measurements[key] or measurements[key][1] == 0 then
+                measurements[key] = { renderer.measure_text(flags, text) }
+            end
+            return measurements[key][1], measurements[key][2]
+        end),
+    }, {__index = renderer})
+end
+
+
+local anima do
+    local animators = setmetatable({}, {__mode = "kv"})
+    local frametime, g_speed = globals.absoluteframetime(), 1
+
+    math.clamp = function (x, a, b) if a > x then return a elseif b < x then return b else return x end end
+
+    anima = {
+        pulse = 0,
+        easings = {
+            pow = {
+                function (x, p) return 1 - ((1 - x) ^ (p or 3)) end,
+                function (x, p) return x ^ (p or 3) end,
+                function (x, p) return x < 0.5 and 4 * math.pow(x, p or 3) or 1 - math.pow(-2 * x + 2, p or 3) * 0.5 end,
+            }
+        },
+        lerp = a(function (a, b, s, t)
+            local c = a + (b - a) * frametime * (s or 8) * g_speed
+            return math.abs(b - c) < (t or .005) and b or c
+        end),
+        condition = a(function (id, c, s, e)
+            local ctx = id[1] and id or animators[id]
+            if not ctx then animators[id] = { c and 1 or 0, c }; ctx = animators[id] end
+            s = s or 4
+            local cur_s = type(s) == "table" and (c and s[1] or s[2]) or s
+            ctx[1] = math.clamp(ctx[1] + (frametime * math.abs(cur_s) * g_speed * (c and 1 or -1)), 0, 1)
+            return (ctx[1] % 1 == 0 or cur_s < 0) and ctx[1] or
+                anima.easings.pow[e and (c and e[1][1] or e[2][1]) or (c and 1 or 3)](ctx[1], e and (c and e[1][2] or e[2][2]) or 3)
+        end)
+    }
+
+    client.set_event_callback("paint_ui", function ()
+        anima.pulse = math.abs(globals.realtime() * 1 % 2 - 1)
+        frametime = globals.absoluteframetime()
+    end)
+end
+
+
+local hud = {}
+hud.watermark = {
+    x = sw - 120, y = 24, w = 160, h = 24,
+    alpha = 0, offset_x = 20, progress = {0}, offset_progress = {0},
+    items = {
+        {
+            0, function (self, x, y)
+                local cname = A_1.A_2
+                local t = string.format(A_1.A_3 == "DEBUG" and "%s" or "%s %s%02x— %s",
+                    cname ~= "" and cname or A_1.A_2, "\aFFFFFF", render.get_alpha() * self[1] * 255, A_1.A_3)
+                local tw, th = render.measure_text("", t)
+                if self[1] > 0 then
+                    render.blur(x, y + 1, tw + 16, 22, 1)
+                    render.rectangle(x, y + 1, tw + 16, 22, colors.panel.l1, 4)
+                    render.text(x + 8, y + 6, colors.text, nil, nil, t)
+                end
+                return true, tw + 16
+            end, {}
+        },
+        {
+            0, function (self, x, y)
+                local hours, minutes = client.system_time()
+                local text = string.format("%02d:%02d", hours, minutes)
+                local tw, th = render.measure_text("", text)
+                if self[1] > 0 then
+                    render.blur(x, y + 1, tw + 16, 22, 1)
+                    render.rectangle(x, y + 1, tw + 16, 22, colors.panel.l1, 4)
+                    render.text(x + 8, y + 6, colors.text, nil, nil, text)
+                end
+                return true, tw + 16
+            end, {}
+        },
+    },
+    enumerate = function (self)
+        local total = 0
+        for i, v in ipairs(self.items) do
+            render.push_alpha(v[1])
+            local state, length = v[2](v, self.x + total + self.offset_x, self.y)
+            render.pop_alpha()
+            v[1] = anima.condition(v[3], state, 2, {{1, 3}, {3, 3}})
+            total = total + (length + 2) * v[1]
+        end
+        self.w = anima.lerp(self.w, total, 10, .5)
+    end,
+    update = function (self)
+        self.alpha = anima.condition(self.progress, true, 2, {{1, 3}, {3, 3}})
+        self.offset_x = anima.lerp(self.offset_x, 0, 10, .01)
+        return self.alpha
+    end,
+    paint = function (self)
+        render.push_alpha(self.alpha)
+        self:enumerate()
+        render.pop_alpha()
+    end
+}
+
+
+client.set_event_callback("paint_ui", function ()
+    hud.watermark:update()
+    hud.watermark:paint()
+end)
+]]--
 
 local default_elements = {
     ui_elements.prediction_factor,
@@ -1396,6 +1874,7 @@ local dependencies = {
         ui_elements.smart_body_lethal,
     },
     [ui_elements.smart_head_aim] = { ui_elements.smart_head_hp_threshold },
+    [ui_elements.a_brute] = { ui_elements.brute_duration },
 --[[
     [ui_elements.flick_detection] = {
         ui_elements.flick_velocity_threshold,
@@ -1612,6 +2091,31 @@ local function extrapolate_yaw_from_anim_history(enemy, data)
     local extrapolation_time = globals.tickinterval() * get_adaptive_choke(enemy)
     local jitter_factor = detect_jitter_pattern(data.yaw_history or {}) and 0.5 or 1.0 -- vменьшаеnmcz при джиттере
     return normalize_angle(recent_anims[1].pose_yaw + yaw_rate * extrapolation_time * jitter_factor)
+end
+
+-- !
+local function apply_brute_angles(player)
+    local data = brute_data[player]
+    if not data or data.state ~= "BRUTEFORCE" or globals.tickcount() > data.end_tick then
+        data.state = "IDLE"
+        return
+    end
+
+    local yaw = adaptive_adjust(player, brute_angles.yaw[data.yaw_index])
+    local body_yaw = brute_angles.body_yaw[data.body_yaw_index]
+    local pitch = brute_angles.pitch[data.pitch_index]
+    data.yaw_index = (data.yaw_index % #brute_angles.yaw) + 1
+    data.body_yaw_index = (data.body_yaw_index % #brute_angles.body_yaw) + 1
+    data.pitch_index = (data.pitch_index % #brute_angles.pitch) + 1
+
+    plist.set(player, "Force body yaw", true)
+    plist.set(player, "Force body yaw value", math.clamp(body_yaw, -60, 60))
+    if ui.get(ui_new_logs_enable) then
+        client.color_log(255, 165, 0, string.format(
+            "[IMMORTAL] Brute: Enemy=%s, Yaw=%.1f, BodyYaw=%.1f, Pitch=%.1f",
+            entity.get_player_name(player), yaw, body_yaw, pitch
+        ))
+    end
 end
 
 local function AlternativePredictPosition(enemy, time_delta)
@@ -1930,13 +2434,13 @@ local function n3r4z1m_resolver()
             for _, enemy in ipairs(enemies) do
                 if resolver_data[enemy] and (resolver_data[enemy].hit_count > 0 or resolver_data[enemy].miss_count < 3) then
                     resolved_target = enemy
-                    client.log("[IMMORTAL] Selected resolved_target: " .. entity.get_player_name(enemy))
+                    client.color_log(255, 255, 255, "[IMMORTAL] пидор: " .. entity.get_player_name(enemy))
                     break
                 end
             end
             if not resolved_target and #enemies > 0 then
                 resolved_target = enemies[1]
-                client.log("[IMMORTAL] Fallback resolved_target: " .. entity.get_player_name(enemies[1]))
+                client.color_log(255, 255, 255, "[IMMORTAL] Resolved target: " .. entity.get_player_name(enemies[1]))
             end
         end
 
@@ -1994,7 +2498,7 @@ local function n3r4z1m_resolver()
         end
     end)
     if not success then
-        client.log("[IMMORTAL] Critical error in resolver: ", err)
+        client.color_log(255, 255, 255, "[IMMORTAL] Critical error in resolver: ", err)
     end
 end
 
@@ -2052,6 +2556,9 @@ local function calculate_distance(pos1, pos2)
     local dz = pos2.z - pos1.z
     return math.sqrt(dx * dx + dy * dy + dz * dz)
 end
+
+
+
 
 local function get_current_target()
     local local_player = entity.get_local_player()
@@ -2291,93 +2798,7 @@ local function n3r4z1m_resolver()
 local ent_c = {}
 ent_c.get_client_entity = vtable_bind('client.dll', 'VClientEntityList003', 3, 'void*(__thiscall*)(void*, int)')
 
-local animation_layer_t = ffi.typeof([[
-    struct {
-        char pad0[0x18];
-        uint32_t m_nSequence;
-        float m_flPrevCycle;
-        float m_flWeight;
-        float m_flWeightDeltaRate;
-        float m_flPlaybackRate;
-        float m_flCycle;
-        void* entity;
-        char pad1[0x4];
-    }**
-]])
 
-local offsets = {
-    animlayer = 0x2990
-}
-
-local function get_animlayer(ent, layer)
-    local ent_ptr = ffi.cast('void***', ent_c.get_client_entity(ent or entity.get_local_player()))
-    local animlayer_ptr = ffi.cast('char*', ent_ptr) + offsets.animlayer
-    local entity_animlayer = ffi.cast(animation_layer_t, animlayer_ptr)[0][layer]
-    return entity_animlayer
-end
-
-local function normalize(value, min, max)
-    return (value - min) / (max - min)
-end
-
-local function bin_value(value, num_bits)
-    local scale_factor = 2 ^ num_bits
-    local scaled_value = math.floor(value * scale_factor + 0.5)
-    local bits = {}
-    for i = num_bits, 1, -1 do
-        local bit_value = 2 ^ (i - 1)
-        if scaled_value >= bit_value then
-            bits[i] = 1
-            scaled_value = scaled_value - bit_value
-        else
-            bits[i] = 0
-        end
-    end
-    return bits
-end
-
-local function insert_first_index(tbl, value, maxSize)
-    if #tbl >= maxSize then
-        table.remove(tbl)
-    end
-    table.insert(tbl, 1, value)
-end
-
-local function average(t)
-    t = t or {}
-    local sum = 0
-    for _, v in pairs(t) do
-        sum = sum + v
-    end
-    return sum / #t
-end
-
-
-local animlayer_average_t = {}
-local animlayer_rec_t = {}
-local velocity_rec_t = {}
-
-local function get_animlayer_rec(ent)
-    animlayer_rec_t[ent] = animlayer_rec_t[ent] or 0
-    return animlayer_rec_t[ent]
-end
-
-local function get_velocity_rec(ent)
-    velocity_rec_t[ent] = velocity_rec_t[ent] or 0
-    return velocity_rec_t[ent]
-end
-
-
--- local mul, binary_size = 1000000000, 20
-
-
-
-local function table_contains(tbl, val)
-    for _, v in ipairs(tbl) do
-        if v == val then return true end
-    end
-    return false
-end
 
 
 local function update_manual_predict_visibility()
@@ -2451,6 +2872,7 @@ update_t3mp3st_visibility()
 
 local resolver_data = {}
 local debug_info = {}
+
 local persist_target = nil
 local resolved_target = nil
 local hit_chance_enabled = false
@@ -2459,6 +2881,7 @@ local adaptive_modes = {"static", "dynamic", "beta"}
 
 local resolver_data = resolver_data or {}
 resolver_data[enemy] = {
+    brute_data = {},
     avg_speed = 0,
     last_yaw = entity.get_prop(enemy, "m_angEyeAngles[1]") or 0,
     last_time = globals.realtime(),
@@ -2759,8 +3182,63 @@ local function enhanced_defensive_fix(enemy, final_yaw)
     return final_yaw
 end
 
+-- region dormat '!' [tts]
+local function dormant_aimbot(cmd)
+    if not ui.get(ui_elements.dormant_aimbot) then return end
+    local lp = entity.get_local_player()
+    if not lp or not entity.is_alive(lp) then return end
 
+    local weapon = entity.get_player_weapon(lp)
+    if not weapon then return end
+    local weapon_id = entity.get_prop(weapon, "m_iItemDefinitionIndex")
+    local bullet_speed = get_bullet_speed(weapon_id)
+    local eyepos = vector(client.eye_position())
+    local simtime = entity.get_prop(lp, "m_flSimulationTime")
+    local weapon_data = weapons(weapon)
+    local scoped = entity.get_prop(lp, "m_bIsScoped") == 1
+    local onground = bit.band(entity.get_prop(lp, 'm_fFlags'), bit.lshift(1, 0))
+    local can_shoot = simtime > math.max(entity.get_prop(lp, "m_flNextAttack"), entity.get_prop(weapon, "m_flNextPrimaryAttack"))
+    local ent = native_GetClientEntity(weapon)
+    local inaccuracy = ent and native_IsWeapon(ent) and native_GetInaccuracy(ent) or 0
 
+    for player = 1, globals.maxplayers() do
+        if entity.is_dormant(player) and entity.is_enemy(player) and entity.get_prop(entity.get_player_resource(), "m_bConnected", player) == 1 then
+            local _, _, _, _, alpha_multiplier = entity.get_bounding_box(player)
+            if alpha_multiplier > 0.795 then
+                local pred_x, pred_y, pred_z = choose_prediction(player, eyepos.x, eyepos.y, eyepos.z, bullet_speed, false)
+                local ent, dmg = client.trace_bullet(lp, eyepos.x, eyepos.y, eyepos.z, pred_x, pred_y, pred_z, true)
+                local can_hit = dmg > ui.get(ui_elements.dormant_min_damage) and not client_visible(pred_x, pred_y, pred_z)
+                
+                if can_hit and can_shoot and inaccuracy < 0.009 then
+                    local data = resolver_data[player] or { confidence = 100, last_yaw = 0 }
+                    local safe_hitbox = (data.confidence > 50 and ui.get(ui_elements.smart_head_aim)) and "Head" or "Chest"
+                    plist.set(player, "Override preferred hitbox", safe_hitbox)
+                    plist.set(player, "Force body yaw", true)
+                    plist.set(player, "Force body yaw value", clamp(data.last_yaw or 0, -60, 60))
+                    
+                    modify_velocity(cmd, (scoped and weapon_data.max_player_speed_alt or weapon_data.max_player_speed) * 0.33)
+                    if not scoped and weapon_data.type == "sniperrifle" and cmd.in_jump == 0 and onground == 1 then
+                        cmd.in_attack2 = 1
+                    end
+                    
+                    local pitch, yaw = eyepos:to(vector(pred_x, pred_y, pred_z)):angles()
+                    cmd.pitch = pitch
+                    cmd.yaw = yaw
+                    cmd.in_attack = 1
+                    
+                    if ui.get(ui_new_logs_enable) then
+                        client.color_log(255, 165, 0, string.format(
+                            "[IMMORTAL] Dormant Shot: %s, Dmg=%d, Alpha=%.3f, Inacc=%.3f, Hitbox=%s",
+                            entity.get_player_name(player), dmg, alpha_multiplier, inaccuracy, safe_hitbox
+                        ))
+                    end
+                end
+            end
+        end
+    end
+end
+
+client.set_event_callback("setup_command", dormant_aimbot)
 
 local function update_enemy_data_fix(enemy)
     local local_player = entity.get_local_player()
@@ -2913,7 +3391,7 @@ local function base_predict_position(enemy, local_x, local_y, local_z, bullet_sp
         accel_factor = math.clamp(1 + (accel / 2000), 0.8, 1.3) -- ускорение
     end
 
-    -- Fast Predict
+    -- fast predict
     if prediction_mode == "simple" then
         prediction_factor = 0.5
     elseif prediction_mode == "beta" then
@@ -2981,7 +3459,7 @@ local function base_predict_position(enemy, local_x, local_y, local_z, bullet_sp
         end
     end
 
-    -- адаптивное ограничение
+    -- адаптивное ограничение !
     local current_head_x, current_head_y, current_head_z = entity.hitbox_position(enemy, 0)
     local clamp_range = 40 + math.clamp(speed / 4, 0, 50) + math.clamp(latency * 250, 0, 40)
     if ui.get(ui_elements.fast_mode) then
@@ -2990,6 +3468,13 @@ local function base_predict_position(enemy, local_x, local_y, local_z, bullet_sp
     pred_x = math.clamp(pred_x, current_head_x - clamp_range, current_head_x + clamp_range)
     pred_y = math.clamp(pred_y, current_head_y - clamp_range, current_head_y + clamp_range)
     pred_z = math.clamp(pred_z, current_head_z - clamp_range, current_head_z + clamp_range)
+
+    if ui.get(ui_elements.dormant_aimbot) and resolver_data[enemy].is_dormant then
+        pred_x, pred_y, pred_z = AlternativePredictPosition(enemy, globals.tickinterval() * 16)
+        if ui.get(ui_elements.a_brute) and brute_data[enemy] and brute_data[enemy].state == "BRUTEFORCE" then
+            apply_brute_angles(enemy)
+        end
+    end
 
     if ui.get(ui_new_logs_enable) then
         client.color_log(255, 165, 0, string.format(
@@ -3001,6 +3486,7 @@ local function base_predict_position(enemy, local_x, local_y, local_z, bullet_sp
 
     return pred_x, pred_y, pred_z
 end
+
 
 local function choose_prediction(enemy, local_x, local_y, local_z, bullet_speed, is_jump_scout)
     local data = resolver_data[enemy] or {}
@@ -3053,22 +3539,26 @@ end
 
     debug_info = {}
     handle_entities()
+    -- bruteforse 'xd'
+    for _, enemy in ipairs(entity.get_players(true)) do
+        init_brute_data(enemy)
+    end
 
     if not resolved_target or not entity.is_alive(resolved_target) then
         resolved_target = nil
         for _, enemy in ipairs(enemies) do
             if resolver_data[enemy] and (resolver_data[enemy].hit_count > 0 or resolver_data[enemy].miss_count < 3) then
                 resolved_target = enemy
-                client.log("[IMMORTAL] Selected resolved_target: " .. entity.get_player_name(enemy))
+                client.color_log(255, 255, 255, "[IMMORTAL] пидарас: " .. entity.get_player_name(enemy))
                 break
             end
         end
         if not resolved_target and #enemies > 0 then
             resolved_target = enemies[1]
-            client.log("[IMMORTAL] Fallback resolved_target: " .. entity.get_player_name(enemies[1]))
+            client.color_log(255, 255, 255, "[IMMORTAL] Resolved target: " .. entity.get_player_name(enemies[1]))
         end
         if not resolved_target then
-            client.log("[IMMORTAL] No resolved_target selected")
+            client.color_log(255, 255, 255, "[IMMORTAL] No resolved_target selected")
         end
     end
 
@@ -3082,6 +3572,13 @@ end
         if entity.is_alive(enemy) then
             local should_process = update_enemy_data_fix(enemy) or (ui.get(ui_elements.dormant_aimbot) and enemy == resolved_target)
             local is_visible = entity.get_prop(enemy, "m_bSpotted") == 1 or (ui.get(ui_elements.dormant_aimbot) and enemy == resolved_target)
+            -- brute helper '-'
+            if ui.get(ui_elements.a_brute) then
+               init_brute_data(enemy)
+                if brute_data[enemy].state == "BRUTEFORCE" then
+                    apply_brute_angles(enemy)
+                end
+            end
 
             if should_process then
                 local data = resolver_data[enemy]
@@ -3394,10 +3891,10 @@ end
 
 
                             if ui.get(ui_toggle_logs) then
-                                client.log(string.format(
+                                client.color_log(255, 255, 255, (string.format(
                                     "[IMMORTAL] Yaw correction for %s: %.1f° (Ping: %.0fms, Loss: %.0f%%, State: %s, Speed: %.0f, AnimFresh: %.1f, PredYaw: %.1f, Confidence: %.0f%%)", --- бляяя лан похуй
                                     entity.get_player_name(enemy), yaw_correction, latency * 1000, loss, state, speed, anim_freshness, yaw_prediction, data.confidence
-                                ))
+                                )))
                             end
                         end
                     end
@@ -3409,7 +3906,8 @@ end
                     local hit_chance = calculate_hit_chance(enemy, pred_x, pred_y, pred_z, local_x, local_y, local_z, weapon_id)
                     local min_hit_chance = hit_chance_enabled and ui.get(ui_elements.hit_chance_override) or 75
                     local should_shoot = hit_chance >= min_hit_chance and (data.confidence >= ui.get(ui_elements.confidence_threshold) or (is_visible and data.confidence >= 30))
-
+--[[
+                    --
                     if not should_shoot then
 --                        client.delay_call(ui.get(ui_elements.low_confidence_delay) / 1000, function()
                             if entity.is_alive(enemy) then
@@ -3417,7 +3915,31 @@ end
                                 plist.set(enemy, "Force body yaw value", clamp(final_yaw, -60, 60))
                             end
 --                        end)
-                        client.color_log(128, 128, 128, "    ")
+                        plist.set(enemy, "Force body yaw", false) -- ъаъаъаъа для прикола оставил
+
+                        plist.set(enemy, "Override preferred hitbox", nil) ]]-- !
+                    if not should_shoot then
+                        local data = resolver_data[enemy] or { confidence = 100, last_yaw = final_yaw }
+                        local safe_yaw = math.lerp(data.last_yaw or final_yaw, final_yaw, 0.3)
+                        if entity.is_alive(enemy) then
+                            plist.set(enemy, "Force body yaw", true)
+                            plist.set(enemy, "Force body yaw value", clamp(safe_yaw, -60, 60))
+                            local safe_hitbox = (data.confidence > 50 and ui.get(ui_elements.smart_head_aim)) and "Head" or "Chest"
+                            plist.set(enemy, "Override preferred hitbox", safe_hitbox)
+                        end
+                        if ui.get(ui_elements.dormant_aimbot) and data.is_dormant then
+                            local pred_x, pred_y, pred_z = choose_prediction(enemy, local_x, local_y, local_z, bullet_speed, ui.get(ui_elements.jump_scout_opt) and is_scout)
+                            -- апасненька гейсекс апи гавно
+--                            plist.set(enemy, "Override aimbot position", pred_x, pred_y, pred_z) -- !!
+                        end
+                        if ui.get(ui_new_logs_enable) then
+                            client.color_log(255, 165, 0, string.format(
+                                "[IMMORTAL] Low confidence: Enemy=%s, SafeYaw=%.1f, Hitbox=%s, Confidence=%.0f, Dormant=%s",
+                                entity.get_player_name(enemy), safe_yaw, safe_hitbox, data.confidence, data.is_dormant and "Yes" or "No"
+                            ))
+                        end
+                        data.last_yaw = safe_yaw
+                        resolver_data[enemy] = data
                     else
                         if is_visible then
                             plist.set(enemy, "Force body yaw", true)
@@ -3439,7 +3961,20 @@ end
                                     plist.set(enemy, "Override preferred hitbox", "Head")
                                 end
                             end
-
+                            -- bruteforse '?' [tts]
+                            if ui.get(ui_elements.a_brute) then
+                                init_brute_data(enemy)
+                                local brute = brute_data[enemy]
+                                brute.state = "BRUTEFORCE"
+                                brute.end_tick = globals.tickcount() + ui.get(ui_elements.brute_duration)
+                                brute.yaw_index = (brute.yaw_index % #brute_angles.yaw) + 1
+                                if ui.get(ui_new_logs_enable) then
+                                    client.color_log(255, 165, 0, string.format(
+                                        "[IMMORTAL] Brute activated on shootable: Enemy=%s", entity.get_player_name(enemy)
+                                    ))
+                                end
+                                brute_data[enemy] = brute
+                            end
                             if ui.get(ui_elements.smart_head_aim) and local_hp <= ui.get(ui_elements.smart_head_hp_threshold) then
                                 if not is_fast_firing_weapon(weapon_id) and enemy_hp > weapon_damage then
                                     plist.set(enemy, "Override preferred hitbox", "Head")
@@ -3562,10 +4097,28 @@ local function on_miss(e)
     local data = resolver_data[target] or {}
     data.miss_count = (data.miss_count or 0) + 1
     data.confidence = math.max(30, data.confidence - 8)
+    --[[
     if nn_network then
         local inputs = get_neural_inputs(target)
         local expected_yaw = entity.get_prop(target, "m_angEyeAngles[1]") or 0
         nn_network:train(inputs, {expected_yaw / 360, 0, 0, 0})
+    end]]
+    if ui.get(ui_elements.a_brute) then
+        init_brute_data(target)
+        local brute = brute_data[target]
+        brute.misses = brute.misses + 1
+        if brute.misses >= 2 then
+            brute.state = "BRUTEFORCE"
+            brute.end_tick = globals.tickcount() + ui.get(ui_elements.brute_duration)
+            brute.yaw_index = (brute.yaw_index % #brute_angles.yaw) + 1
+            if ui.get(ui_new_logs_enable) then
+                client.color_log(255, 165, 0, string.format(
+                    "[IMMORTAL] Brute activated on miss: Enemy=%s, Misses=%d",
+                    entity.get_player_name(target), brute.misses
+                ))
+            end
+        end
+        brute_data[target] = brute
     end
     resolver_data[target] = data
     if ui.get(ui_new_logs_enable) then
@@ -3588,20 +4141,20 @@ client.set_event_callback('paint_ui', function()
     for _, enemy in ipairs(enemies) do
         if resolver_data[enemy] and (resolver_data[enemy].hit_count > 0 or resolver_data[enemy].miss_count < 3) then
             resolved_target = enemy
-            client.log("[IMMORTAL] Selected resolved_target: " .. entity.get_player_name(enemy))
+            client.color_log(255, 255, 255, "[IMMORTAL] Selected resolved target: " .. entity.get_player_name(enemy))
             break
         end
     end
     if not resolved_target and #enemies > 0 then
         resolved_target = enemies[1]
-        client.log("[IMMORTAL] Fallback resolved_target: " .. entity.get_player_name(enemies[1]))
+        client.color_log(255, 255, 255, "[IMMORTAL] Resolved target: " .. entity.get_player_name(enemies[1]))
     end
     if not resolved_target then
-        client.log("[IMMORTAL] No resolved_target selected")
+        client.color_log(255, 255, 255, "[IMMORTAL] No resolved target")
     end
 end
     if not nn_network then
-        client.log("[IMMORTAL] Error: Neural network not initialized")
+        client.color_log(255, 255, 255, "[IMMORTAL] Error: Neural network not initialized")
         return
     end
     local scr_w, scr_h = client.screen_size()
@@ -3610,10 +4163,9 @@ end
 end)
     end)
     if not success then
-        client.log("[IMMORTAL] Critical error in resolver: ", err)
+        client.color_log(255, 255, 255, "[IMMORTAL] Critical error in resolver: ", err)
     end
 end
-
 
 
 
@@ -3682,3 +4234,4 @@ end
 
 -- WaRnInG ⬇
 -- RNJ "NJ GTHTDTK NJN {ETCJC T<FYYSQ!!!
+
