@@ -103,5 +103,20 @@
         "avatar_url": "https://cdn.discordapp.com/avatars/876534218988064798/740318a444c77bd4301b812119f30cf5.png?size=1024",
         "message_id": "1394767657689153546",
         "guild_id": "1345780058635374673"
+    },
+    "3623697e-08a7-4571-908c-f4c992ac7c25": {
+        "key": "3623697e-08a7-4571-908c-f4c992ac7c25",
+        "steam_id": "76561199367528327",
+        "duration": "30d",
+        "key_type": "IMMORTAL",
+        "key_link": "https://raw.githubusercontent.com/Leganor/resolver/refs/heads/main/keys",
+        "created": "2025-07-16 10:19 EEST",
+        "expires": "2025-08-15 10:19 EEST",
+        "creator": "cosmo_so_",
+        "user_id": "1379176103683555501",
+        "discord_nickname": "k4nzh4t",
+        "avatar_url": "https://cdn.discordapp.com/avatars/1379176103683555501/11462ba679bc591898cfad64671cee68.png?size=1024",
+        "message_id": "1394941528228626553",
+        "guild_id": "1345780058635374673"
     }
 }
