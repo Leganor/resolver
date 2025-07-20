@@ -74,6 +74,21 @@
         "message_id": "1392824812845404261",
         "guild_id": "1345780058635374673"
     },
+    "f02ea600-f86d-4de5-9ffc-95ce057f2f69": {
+        "key": "f02ea600-f86d-4de5-9ffc-95ce057f2f69",
+        "steam_id": "76561199499277987",
+        "duration": "90d",
+        "key_type": "Hellrise",
+        "key_link": "https://raw.githubusercontent.com/Leganor/hellrise/refs/heads/main/keys",
+        "created": "2025-07-10 15:01 EEST",
+        "expires": "2025-10-08 15:01 EEST",
+        "creator": "_qkittyp_",
+        "user_id": "696993657038962709",
+        "discord_nickname": "_qkittyp_",
+        "avatar_url": "https://cdn.discordapp.com/avatars/696993657038962709/00aae490eeb00534331f7c12e23213ec.png?size=1024",
+        "message_id": "1392838063750647859",
+        "guild_id": "1383848652556075049"
+    },
     "cefc0d5e-11f9-4fb6-895a-b9a506a581ab": {
         "key": "cefc0d5e-11f9-4fb6-895a-b9a506a581ab",
         "steam_id": "76561199849500435",
@@ -119,21 +134,6 @@
         "message_id": "1394966456042786856",
         "guild_id": "1345780058635374673"
     },
-    "f02ea600-f86d-4de5-9ffc-95ce057f2f69": {
-        "key": "f02ea600-f86d-4de5-9ffc-95ce057f2f69",
-        "steam_id": "76561199499277987",
-        "duration": "90d",
-        "key_type": "Hellrise",
-        "key_link": "https://raw.githubusercontent.com/Leganor/hellrise/refs/heads/main/keys",
-        "created": "2025-07-10 15:01 EEST",
-        "expires": "2025-10-08 15:01 EEST",
-        "creator": "_qkittyp_",
-        "user_id": "696993657038962709",
-        "discord_nickname": "_qkittyp_",
-        "avatar_url": "https://cdn.discordapp.com/avatars/696993657038962709/00aae490eeb00534331f7c12e23213ec.png?size=1024",
-        "message_id": "1392838063750647859",
-        "guild_id": "1383848652556075049"
-    },
     "e5f3f023-d302-4533-b71c-3707428b90e7": {
         "key": "e5f3f023-d302-4533-b71c-3707428b90e7",
         "steam_id": "76561199866562157",
@@ -147,6 +147,21 @@
         "discord_nickname": "dommy666",
         "avatar_url": "https://cdn.discordapp.com/avatars/670183006907924490/6e377efae42de63fdc678848da502d68.png?size=1024",
         "message_id": "1394984582843072593",
+        "guild_id": "1364233229560975438"
+    },
+    "ed61eb20-e9ec-4fff-845e-e398f8c81348": {
+        "key": "ed61eb20-e9ec-4fff-845e-e398f8c81348",
+        "steam_id": "76561199803277055",
+        "duration": "30d",
+        "key_type": "IMMORTAL",
+        "key_link": "https://raw.githubusercontent.com/Leganor/resolver/refs/heads/main/keys",
+        "created": "2025-07-20 14:28 EEST",
+        "expires": "2025-08-19 14:28 EEST",
+        "creator": "neon14827",
+        "user_id": "1226446255069335593",
+        "discord_nickname": "morxx1z",
+        "avatar_url": "https://cdn.discordapp.com/avatars/1226446255069335593/c97146e295a7b0f304a2f2458ac9d6d9.png?size=1024",
+        "message_id": "1396453839485407332",
         "guild_id": "1364233229560975438"
     }
 }
