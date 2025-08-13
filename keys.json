@@ -223,5 +223,20 @@
         "avatar_url": "https://cdn.discordapp.com/avatars/1348262447466807327/15efa3bd51908b8a63616c7784e48d81.png?size=1024",
         "message_id": "1403738922428797079",
         "guild_id": "1364233229560975438"
+    },
+    "3733d923-9fcf-4e15-a2e1-14e7e05cecdf": {
+        "key": "3733d923-9fcf-4e15-a2e1-14e7e05cecdf",
+        "steam_id": "76561199409527742",
+        "duration": "30d",
+        "key_type": "IMMORTAL",
+        "key_link": "https://raw.githubusercontent.com/Leganor/resolver/refs/heads/main/keys",
+        "created": "2025-08-13 19:07 EEST",
+        "expires": "2025-09-12 19:07 EEST",
+        "creator": "neon14827",
+        "user_id": "911362323883630652",
+        "discord_nickname": "bexa_.",
+        "avatar_url": "https://cdn.discordapp.com/avatars/911362323883630652/4ea001059ee277cad83c29232743028c.png?size=1024",
+        "message_id": "1405221174102855681",
+        "guild_id": "1364233229560975438"
     }
 }
